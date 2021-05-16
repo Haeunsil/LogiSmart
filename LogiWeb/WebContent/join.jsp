@@ -22,12 +22,15 @@
 	 		<span class="icon-bar"></span>
 	 		<span class="icon-bar"></span>
 	 		</button>
-	 		<a class="navbar-brand" href="main.jsp">Manage Page</a>
+	 		<a class="navbar-brand" href="main.jsp">LogiSmart Manage Page</a>
 	 </div>
 	 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 	 	<ul class="nav navbar-nav">
 	 	<li><a href="main.jsp">메인</a></li>
-	 	<li><a href="manage_bbs.jsp">Manage Page</a></li>
+	 	<li><a href="manage_Accept.jsp">운반수락</a></li>
+	 	<li><a href="manage_bbs.jsp">운반현황</a></li>
+	 	<li><a href="manage_manager.jsp">관리자현황</a></li>
+	 	<li><a href="manage_carrier.jsp">운반자현황</a></li>
 	 	</ul>
 	 	<ul class="nav navbar-nav navbar-right">
 	 		<li class="dropdown">

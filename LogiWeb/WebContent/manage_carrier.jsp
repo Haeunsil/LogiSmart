@@ -1,5 +1,9 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
-<%@ page import="java.io.PrintWriter" %>
+<%@ page  contentType="text/html;charset=euc-kr" 
+        import="java.sql.DriverManager,
+                   java.sql.Connection,
+                   java.sql.Statement,
+                   java.sql.ResultSet,
+                   java.sql.SQLException" %>
 <%@ page import="manager.Manager" %>
 <%@ page import="manager.ManagerDAO" %>
 <%@ page import="java.util.ArrayList" %>
@@ -16,8 +20,8 @@
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script src="js/bootstrap.js"></script>
 </head>
-<body>
-	<%
+<body>             
+        <%
 		request.setCharacterEncoding("UTF-8");
 		String userID = null;
 		if (session.getAttribute("userID") != null) {
@@ -27,7 +31,7 @@
 		if(request.getParameter("pageNumber") != null){
 			pageNumber = Integer.parseInt(request.getParameter("pageNumber"));
 		}
-		String searchType="ì „ì²´";
+		String searchType="ÀüÃ¼";
 		if(request.getParameter("searchType") != null){
 			searchType = request.getParameter("searchType");
 		}
@@ -50,11 +54,11 @@
 	 </div>
 	 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 	 	<ul class="nav navbar-nav">
-	 	<li><a href="main.jsp">ë©”ì¸</a></li>
-	 	<li><a href="manage_Accept.jsp">ìš´ë°˜ìˆ˜ë½</a></li>
-	 	<li><a href="manage_bbs.jsp">ìš´ë°˜í˜„í™©</a></li>
-	 	<li><a href="manage_manager.jsp">ê´€ë¦¬ìží˜„í™©</a></li>
-	 	<li><a href="manage_carrier.jsp">ìš´ë°˜ìží˜„í™©</a></li>
+	 	<li><a href="main.jsp">¸ÞÀÎ</a></li>
+	 	<li><a href="manage_Accept.jsp">¿î¹Ý¼ö¶ô</a></li>
+	 	<li><a href="manage_bbs.jsp">¿î¹ÝÇöÈ²</a></li>
+	 	<li><a href="manage_manager.jsp">°ü¸®ÀÚÇöÈ²</a></li>
+	 	<li><a href="manage_carrier.jsp">¿î¹ÝÀÚÇöÈ²</a></li>
 	 	</ul>
 	 	<%
 	 		if(userID == null){
@@ -63,10 +67,10 @@
 	 		<li class="dropdown">
 	 			<a href="#" class="dropdown-toggle"
 	 				data-toggle="dropdown" role="button" aria-haspopup="true"
-	 				aria-expanded="false">ê´€ë¦¬ìž ì ‘ì†í•˜ê¸°<span class="caret"></span></a>
-	 			<ul class="dropdown-menu">
-	 				<li><a href="login.jsp">ë¡œê·¸ì¸</a></li>
-	 				<li><a href="join.jsp">ê´€ë¦¬ìžì¶”ê°€</a></li>
+	 				aria-expanded="false">°ü¸®ÀÚ Á¢¼ÓÇÏ±â<span class="caret"></span></a>
+	 				<ul class="dropdown-menu">
+	 				<li><a href="login.jsp">·Î±×ÀÎ</a></li>
+	 				<li><a href="join.jsp">°ü¸®ÀÚÃß°¡</a></li>
 	 			</ul>
 	 		</li>
 	 	</ul>
@@ -77,9 +81,9 @@
 	 		<li class="dropdown">
 	 			<a href="#" class="dropdown-toggle"
 	 				data-toggle="dropdown" role="button" aria-haspopup="true"
-	 				aria-expanded="false">íšŒì›ê´€ë¦¬<span class="caret"></span></a>
+	 				aria-expanded="false">È¸¿ø°ü¸®<span class="caret"></span></a>
 	 			<ul class="dropdown-menu">
-	 				<li><a href="logoutAction.jsp">ë¡œê·¸ì•„ì›ƒ</a></li>
+	 				<li><a href="logoutAction.jsp">·Î±×¾Æ¿ô</a></li>
 	 			</ul>
 	 		</li>
 	 	</ul>
@@ -91,15 +95,15 @@
 	
 	<div class = "container">
 		
-		<form method="get" action="manage_carrier.jsp" class="form-inline" style="margin-bottom: 10px">
+		<form method="get" action="manage_manager.jsp" class="form-inline" style="margin-bottom: 10px">
 				<select name="searchType" class="form-control">
-					<option value="ì „ì²´">ì „ì²´</option>
-					<option value="ì´ë¦„" <%if(searchType.equals("ì´ë¦„")) out.println("selected");%>>ì´ë¦„</option>
-					<option value="ìƒíƒœ" <%if(searchType.equals("ìƒíƒœ")) out.println("selected");%>>ìƒíƒœ</option>
-					<option value="ì •ë³´" <%if(searchType.equals("ì •ë³´")) out.println("selected");%>>ì •ë³´</option>
+					<option value="ÀüÃ¼">ÀüÃ¼</option>
+					<option value="ÀÌ¸§" <%if(searchType.equals("ÀÌ¸§")) out.println("selected");%>>ÀÌ¸§</option>
+					<option value="»óÅÂ" <%if(searchType.equals("»óÅÂ")) out.println("selected");%>>»óÅÂ</option>
+					<option value="Á¤º¸" <%if(searchType.equals("Á¤º¸")) out.println("selected");%>>Á¤º¸</option>
 				</select>
-				<input type="text" name="search" class="form-control" <% if(!search.equals("")) out.println("value="+ search); else out.println("placeholder=\"ë‚´ìš©ì„ ìž…ë ¥í•˜ì„¸ìš”\""); %>>
-				<button type="submit" class="form-control btn btn-primary">ê²€ìƒ‰</button>
+				<input type="text" name="search" class="form-control" <% if(!search.equals("")) out.println("value="+ search); else out.println("placeholder=\"³»¿ëÀ» ÀÔ·ÂÇÏ¼¼¿ä\""); %>>
+				<button type="submit" class="form-control btn btn-primary">°Ë»ö</button>
 			
 		</form>
 	
@@ -108,68 +112,68 @@
 			<table class="table table-striped" style ="text-align: center; border: 1px solid #dddddd">
 				<thead>
 					<tr>
-						<th style="background-color: #eeeee; text-align: center;">ì•„ì´ë””</th>
-						<th style="background-color: #eeeee; text-align: center;">ë¹„ë°€ë²ˆí˜¸</th>
-						<th style="background-color: #eeeee; text-align: center;">ì´ë¦„</th>
-						<th style="background-color: #eeeee; text-align: center;">ì„±ë³„</th>
-						<th style="background-color: #eeeee; text-align: center;">í•¸ë“œí°ë²ˆí˜¸</th>
+						<th style="background-color: #eeeee; text-align: center;">¼ø¹ø</th>
+						<th style="background-color: #eeeee; text-align: center;">ÀÌ¸§</th>
+						<th style="background-color: #eeeee; text-align: center;">»ýÀÏ</th>
+						<th style="background-color: #eeeee; text-align: center;">ÇÚµåÆù¹øÈ£</th>
+						<th style="background-color: #eeeee; text-align: center;">ºñ°í</th>
 					</tr>
-				</thead>
-				
-				<tbody>
- 				<%	
- 					ManagerDAO managerDAO = new ManagerDAO();
-					ArrayList<Manager> list = managerDAO.getList(pageNumber);
-					System.out.println("============================> "+list.size());
-					for(int i = 0; i < list.size(); i++){	
-						if(i==10) break;
-				%>
-					<tr>
-						<td><%= list.get(i).getm_ID() %></td>
-						<td><%= list.get(i).getm_Password() %></td>
-						<td><%= list.get(i).getm_Name() %></td>
-						<td><%= list.get(i).getm_Gender() %></td>
-						<td><%= list.get(i).getm_Phone() %></td>
-					</tr>
-					<% 
-						}
-					%>
-				</tbody>				
-			</table>
-			<%
-				if(pageNumber <=0){
-			%>
-			
-			<a class="btn btn-success disabled">ì´ì „</a>
-			
-			<%
-				} else {
-			%>
-			
-			<a href="manage_bbs.jsp?searchType=<%= URLEncoder.encode(searchType, "UTF-8") %>&search=<%= URLEncoder.encode(search, "UTF-8") %>&pageNumber=<%= pageNumber - 1 %>" class="btn btn-success">ì´ì „</a>
-			<%
-				} 
-			%>
-			<%
-				if(list.size() < 10){
-			%>
-			
-			<a class="btn btn-success disabled">ë‹¤ìŒ</a>
-			
-			<%
-				} else {
-					
-			%>
-			
-			<a href="manage_bbs.jsp?searchType=<%= URLEncoder.encode(searchType, "UTF-8") %>&search=<%= URLEncoder.encode(search, "UTF-8") %>&pageNumber=<%= pageNumber + 1 %>" class="btn btn-success">ë‹¤ìŒ</a>
-			<%
-				} 
-			%>
-			
-			<a href="join.jsp" class="btn btn-primary pull-right">ìš´ë°˜ìž ì‚­ì œ</a>
-			<a href="join.jsp" class="btn btn-primary pull-right">ìš´ë°˜ìž ì¶”ê°€</a>
-			
-		</div>
-	</div>
+				</thead>           
+ 
+		 <tbody>              
+		<%
+		  response.setContentType("text/html;charset=euc-kr;");
+		  request.setCharacterEncoding("euc-kr");     //charset, Encoding ¼³Á¤
+		
+		  Class.forName("com.mysql.jdbc.Driver");    // load the drive
+		  String DB_URL = 
+				  "jdbc:mysql://localhost/logismart?characterEncoding=UTF-8&serverTimezone=UTC";
+		                 // ÁÖÀÇ : test by changing mydb to name that you make
+		
+		  String DB_USER = "logismart";
+		  String DB_PASSWORD= "Logi2017253012";
+		
+		  Connection conn= null;
+		  Statement stmt = null;
+		  ResultSet rs   = null;
+		
+		  try {
+		      conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+		      stmt = conn.createStatement();
+		
+		      String query = "SELECT c_id, c_name, c_birth, c_phone FROM carriers";
+		      rs = stmt.executeQuery(query);
+		 %>
+		
+		<%
+		    while(rs.next()) { //rs ¸¦ ÅëÇØ Å×ÀÌºí °´Ã¼µéÀÇ ÇÊµå°ªÀ» ³Ñ°Üº¼ ¼ö ÀÖ´Ù.
+		%><tr>
+		<td><%=rs.getString(1)%></td>
+		<td><%=rs.getString(2)%></td>
+		<td><%=rs.getString("c_birth")%></td>
+		<td><%=rs.getString("c_phone")%></td>
+		<td><a href="deleteAction.jsp?del=<%=rs.getString(1)%>">»èÁ¦</a>
+		</td>
+		</tr>
+			</tbody>				
+		<%
+		    } // end while
+		%></table>
+		
+		<%
+		  rs.close();        // ResultSet exit
+		  stmt.close();     // Statement exit
+		  conn.close();    // Connection exit
+		}
+		catch (SQLException e) {
+		      out.println("err:"+e.toString());
+		}
+		%>
+		
+
+
+
 </body>
 </html>
+
+
