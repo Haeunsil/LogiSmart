@@ -21,7 +21,7 @@ public class ManagerDAO {
 			String dbID = "logismart";
 			String dbPassword = "Logi2017253012";
 
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection(dbURL, dbID, dbPassword);
 		}catch (Exception e) {
 			e.printStackTrace();

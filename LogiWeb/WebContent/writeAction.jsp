@@ -24,7 +24,7 @@
 			script.println("location.href = 'login.jsp'");
 			script.println("</script>");
 		} else {
-			if (managebbs.getBbsTitle() == null || managebbs.getBbsContent() == null ) {
+			if (managebbs.getBbs_name() == null || managebbs.getBbs_manager() == null ) {
 				PrintWriter script = response.getWriter();
 				script.println("<script>");
 				script.println("alert('입력이 되지 않은 사항이 있습니다.')");
@@ -32,7 +32,7 @@
 				script.println("</script>");
 			} else {
 				ManageBbsDAO managebbsDAO = new ManageBbsDAO();
-				int result = managebbsDAO.write(managebbs.getBbsTitle(), userID, managebbs.getBbsContent());
+				int result = managebbsDAO.write(managebbs.getBbs_name(), managebbs.getBbs_manager(), managebbs.getBbs_start(), managebbs.getBbs_arrival());
 				if (result == -1) {
 					PrintWriter script = response.getWriter();
 					script.println("<script>");

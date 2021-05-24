@@ -1,3 +1,4 @@
+<%@ page import="java.sql.*" %>
 <%@ page  contentType="text/html;charset=euc-kr" 
         import="java.sql.DriverManager,
                    java.sql.Connection,
@@ -95,7 +96,7 @@
 	
 	<div class = "container">
 		
-		<form method="get" action="manage_manager.jsp" class="form-inline" style="margin-bottom: 10px">
+		<form method="get" action="manage_carrier.jsp" class="form-inline" style="margin-bottom: 10px">
 				<select name="searchType" class="form-control">
 					<option value="전체">전체</option>
 					<option value="이름" <%if(searchType.equals("이름")) out.println("selected");%>>이름</option>
@@ -120,56 +121,58 @@
 					</tr>
 				</thead>           
  
-		 <tbody>              
-		<%
-		  response.setContentType("text/html;charset=euc-kr;");
-		  request.setCharacterEncoding("euc-kr");     //charset, Encoding 설정
-		
-		  Class.forName("com.mysql.jdbc.Driver");    // load the drive
-		  String DB_URL = 
-				  "jdbc:mysql://localhost/logismart?characterEncoding=UTF-8&serverTimezone=UTC";
-		                 // 주의 : test by changing mydb to name that you make
-		
-		  String DB_USER = "logismart";
-		  String DB_PASSWORD= "Logi2017253012";
-		
-		  Connection conn= null;
-		  Statement stmt = null;
-		  ResultSet rs   = null;
-		
-		  try {
-		      conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-		      stmt = conn.createStatement();
-		
-		      String query = "SELECT c_id, c_name, c_birth, c_phone FROM carriers";
-		      rs = stmt.executeQuery(query);
-		 %>
-		
-		<%
-		    while(rs.next()) { //rs 를 통해 테이블 객체들의 필드값을 넘겨볼 수 있다.
-		%><tr>
-		<td><%=rs.getString(1)%></td>
-		<td><%=rs.getString(2)%></td>
-		<td><%=rs.getString("c_birth")%></td>
-		<td><%=rs.getString("c_phone")%></td>
-		<td><a href="deleteAction.jsp?del=<%=rs.getString(1)%>">삭제</a>
-		</td>
-		</tr>
-			</tbody>				
-		<%
-		    } // end while
-		%></table>
-		
-		<%
-		  rs.close();        // ResultSet exit
-		  stmt.close();     // Statement exit
-		  conn.close();    // Connection exit
-		}
-		catch (SQLException e) {
-		      out.println("err:"+e.toString());
-		}
-		%>
-		
+		 <tbody>         
+		 
+		      
+			<%
+			
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			
+			String dbUrl="jdbc:mysql://localhost/logismart?characterEncoding=UTF-8&serverTimezone=UTC";
+			
+			String dbUser="logismart";
+			
+			String dbpass="Logi2017253012";
+			
+			Connection con=DriverManager.getConnection(dbUrl, dbUser, dbpass);
+			
+			String sql="select * from carriers";
+			
+			PreparedStatement pstmt=con.prepareStatement(sql);
+			
+			 
+			
+			ResultSet rs=pstmt.executeQuery();
+			
+			 
+			
+			%>
+			
+			 
+			
+	
+			
+			<%
+			
+			while(rs.next()){
+			
+			%>
+			
+			<tr><td><%=rs.getInt("c_id")%> </td>
+			
+			<td><%=rs.getString("c_name")%></td>
+			
+			<td><%=rs.getString("c_birth")%> </td>
+			
+			<td><%=rs.getString("c_phone")%> </td>
+			<td>비고 </td>
+			</tr><%
+			
+			}
+			
+			%>
+
+ 
 
 
 

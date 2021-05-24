@@ -126,12 +126,12 @@
 						if(i==10) break;
 				%>
 					<tr>
-						<td><%= list.get(i).getBbsID() %></td>
-						<td><a href="view.jsp?bbsID=<%= list.get(i).getBbsID() %>"><%= list.get(i).getBbsTitle() %></a></td>
-						<td><%= list.get(i).getBbsDate().substring(0,11) + list.get(i).getBbsDate().substring(11,13)+"시"+list.get(i).getBbsDate().substring(14,16)+"분" %></td>
-						<td><%= list.get(i).getUserID() %></td>
-						<td><%= list.get(i).getUserID() %></td>
-						<td><input type='checkbox' name='check' value=list.get(i).getBbsID()/></a></td>
+						<td><%= list.get(i).getBbs_num() %></td>
+						<td><a href="view.jsp?Bbs_num=<%= list.get(i).getBbs_num() %>"><%= list.get(i).getBbs_name() %></a></td>
+						<td><%= list.get(i).getBbs_manager() %></td>
+						<td><%= list.get(i).getBbs_start() %></td>
+						<td><%= list.get(i).getBbs_arrival() %></td>
+						<td><input type='checkbox' name='check' value=list.get(i).getBbs_num()/></a></td>
 					
 					</tr>
 					<% 

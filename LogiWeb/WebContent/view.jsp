@@ -20,18 +20,18 @@
 		if (session.getAttribute("userID") != null) {
 			userID = (String) session.getAttribute("userID");
 		}
-		int bbsID = 0;
-		if(request.getParameter("bbsID") != null){
-			bbsID = Integer.parseInt(request.getParameter("bbsID"));
+		int Bbs_num = 0;
+		if(request.getParameter("Bbs_num") != null){
+			Bbs_num = Integer.parseInt(request.getParameter("Bbs_num"));
 		}
-		if(bbsID ==0){
+		if(Bbs_num ==0){
 			PrintWriter script = response.getWriter();
 			script.println("<script>");
 			script.println("alert('유효하지 않은 글입니다..')");
 			script.println("location.href = 'manage_bbs.jsp'");
 			script.println("</script>");
 		}
-		ManageBbs managebbs = new ManageBbsDAO().getmanagebbs(bbsID);
+		ManageBbs managebbs = new ManageBbsDAO().getmanagebbs(Bbs_num);
 		
 	%>
 	<nav class="navbar navbar-default">
@@ -97,46 +97,46 @@
 				<tbody>
 					<tr>
 						<td>물품 번호</td>
-						<td colspan="2"><%= managebbs.getBbsID() %></td>
+						<td colspan="2"><%= managebbs.getBbs_num() %></td>
 					</tr>
 					<tr>
 						<td style="width: 20%;">물품 이름</td>
-						<td colspan="2"><%= managebbs.getBbsTitle() %></td>
+						<td colspan="2"><%= managebbs.getBbs_name() %></td>
 					</tr>
 					<tr>
 						<td style="width: 20%;">출발지 -> 도착지</td>
-						<td colspan="2"><%= managebbs.getBbsTitle() %></td>
+						<td colspan="2">서울 -> 원주</td>
 					</tr>
 					<tr>
 						<td style="width: 20%;">운반자</td>
-						<td colspan="2"><%= managebbs.getBbsTitle() %></td>
+						<td colspan="2">홍길동</td>
 					</tr>
 					</tr>
 						<td style="width: 20%;">실시간 온도</td>
-						<td colspan="2"><%= managebbs.getBbsTitle() %></td>
+						<td colspan="2">40도</td>
 					<tr>
 					</tr>
 						<td style="width: 20%;">실시간 위치</td>
-						<td colspan="2"><%= managebbs.getBbsTitle() %></td>
+						<td colspan="2">경기도 하남시</td>
 					<tr>
 					<tr>
 						<td style="width: 20%;">기기명</td>
-						<td colspan="2"><%= managebbs.getBbsTitle() %></td>
+						<td colspan="2"></td>
 					</tr>
 						<td style="width: 20%;">기기 연결 여부</td>
-						<td colspan="2"><%= managebbs.getBbsTitle() %></td>
+						<td colspan="2">Not Connected</td>
 					<tr>
 						<td style="width: 20%;">기타 내용</td>
-						<td colspan="2" style="min-height: 200px; text-align: center;"><%= managebbs.getBbsContent().replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;").replaceAll(">","&gt;") %></td>
+						<td colspan="2" style="min-height: 200px; text-align: center;"><%= managebbs.getBbs_manager().replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;").replaceAll(">","&gt;") %></td>
 					</tr>
 				</tbody>
 			</table>
 			<a href="manage_bbs.jsp" class="btn btn-primary">목록</a>
 			<%
-				if(userID != null && userID.equals(managebbs.getUserID())){
+				if(userID != null && userID.equals(managebbs.getBbs_name())){
 			%>
-				<a href="update.jsp?bbsID=<%= bbsID %>" class="btn btn-primary">수정</a>
-				<a href="deleteAction.jsp?bbsID=<%= bbsID%>" class="btn btn-primary">삭제</a>
+				<a href="update.jsp?Bbs_num=<%= Bbs_num %>" class="btn btn-primary">수정</a>
+				<a href="deleteAction.jsp?Bbs_num=<%= Bbs_num%>" class="btn btn-primary">삭제</a>
 			<%
 				}
 			%>

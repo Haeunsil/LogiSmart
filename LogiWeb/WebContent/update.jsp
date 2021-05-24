@@ -27,19 +27,19 @@
 				script.println("location.href = 'login.jsp'");
 				script.println("</script>");
 		}
-		int BbsID = 0;
-		if(request.getParameter("BbsID") != null){
-			BbsID = Integer.parseInt(request.getParameter("BbsID"));
+		int Bbs_num = 0;
+		if(request.getParameter("Bbs_num") != null){
+			Bbs_num = Integer.parseInt(request.getParameter("Bbs_num"));
 		}
-		if(BbsID ==0){
+		if(Bbs_num ==0){
 			PrintWriter script = response.getWriter();
 			script.println("<script>");
 			script.println("alert('유효하지 않은 글입니다..')");
 			script.println("location.href = 'manage_bbs.jsp'");
 			script.println("</script>");
 		}
-		ManageBbs managebbs = new ManageBbsDAO().getmanagebbs(BbsID);
-		if(!userID.equals(managebbs.getUserID())){
+		ManageBbs managebbs = new ManageBbsDAO().getmanagebbs(Bbs_num);
+		if(!userID.equals(managebbs.getBbs_manager())){
 			PrintWriter script = response.getWriter();
 			script.println("<script>");
 			script.println("alert('권한이 없습니다.')");
@@ -77,7 +77,7 @@
 	</nav>
 	<div class = "container">
 		<div class="row">
-		<form method="post" action="updateAction.jsp?BbsID=<%= BbsID %>">
+		<form method="post" action="updateAction.jsp?Bbs_num=<%= Bbs_num %>">
 			<table class="table table-striped" style ="text-align: center; border: 1px solid #dddddd">
 				<thead>
 					<tr>
@@ -87,10 +87,10 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td><input type="text" class="form-control" placeholder="글제목" name="BbsTitle" maxlength="50" value="<%= managebbs.getBbsTitle() %>"></td>
+						<td><input type="text" class="form-control" placeholder="글제목" name="Bbs_name" maxlength="50" value="<%= managebbs.getBbs_name() %>"></td>
 					</tr>
 					<tr>
-						<td><textarea rows="10"  class="form-control" placeholder="명언내용" name="BbsContent" maxlength="2048"><%= managebbs.getBbsContent() %></textarea></td>
+						<td><textarea rows="10"  class="form-control" placeholder="명언내용" name="Bbs_manager" maxlength="2048"><%= managebbs.getBbs_manager() %></textarea></td>
 					</tr>
 
 				</tbody>

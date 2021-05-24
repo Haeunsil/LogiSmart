@@ -110,9 +110,9 @@
 					<tr>
 						<th style="background-color: #eeeee; text-align: center;">번호</th>
 						<th style="background-color: #eeeee; text-align: center;">물품 이름</th>
-						<th style="background-color: #eeeee; text-align: center;">등록일</th>
-						<th style="background-color: #eeeee; text-align: center;">운반자</th>
-						<th style="background-color: #eeeee; text-align: center;">상태</th>
+						<th style="background-color: #eeeee; text-align: center;">담당관리자</th>
+						<th style="background-color: #eeeee; text-align: center;">출발지</th>
+						<th style="background-color: #eeeee; text-align: center;">도착지</th>
 						<th style="background-color: #eeeee; text-align: center;">상세정보</th>
 					</tr>
 				</thead>
@@ -126,12 +126,12 @@
 						if(i==10) break;
 				%>
 					<tr>
-						<td><%= list.get(i).getBbsID() %></td>
-						<td><a href="view.jsp?bbsID=<%= list.get(i).getBbsID() %>"><%= list.get(i).getBbsTitle() %></a></td>
-						<td><%= list.get(i).getBbsDate().substring(0,11) + list.get(i).getBbsDate().substring(11,13)+"시"+list.get(i).getBbsDate().substring(14,16)+"분" %></td>
-						<td><%= list.get(i).getUserID() %></td>
-						<td><%= list.get(i).getUserID() %></td>
-						<td><a href="view.jsp?bbsID=<%= list.get(i).getBbsID() %>"><%= list.get(i).getBbsTitle() %></a></td>
+						<td><%= list.get(i).getBbs_num() %></td>
+						<td><a href="view.jsp?Bbs_num=<%= list.get(i).getBbs_num() %>"><%= list.get(i).getBbs_name() %></a></td>
+						<td><%= list.get(i).getBbs_manager() %></td>
+						<td><%= list.get(i).getBbs_start() %></td>
+						<td><%= list.get(i).getBbs_arrival() %></td>
+						<td>상세정보</td>
 					</tr>
 					<% 
 						}

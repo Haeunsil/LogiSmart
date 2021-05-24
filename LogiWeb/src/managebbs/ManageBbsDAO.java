@@ -17,7 +17,6 @@ public class ManageBbsDAO {
 				String dbURL = "jdbc:mysql://localhost/logismart?characterEncoding=UTF-8&serverTimezone=UTC";
 				String dbID = "logismart";
 				String dbPassword = "Logi2017253012";
-				Class.forName("com.mysql.jdbc.Driver");
 				conn = DriverManager.getConnection(dbURL, dbID, dbPassword);
 			}catch (Exception e) {
 				e.printStackTrace();
@@ -39,7 +38,7 @@ public class ManageBbsDAO {
 	}
 		
 	public int getNext() {
-		String SQL = "SELECT bbsID FROM managebbs ORDER BY bbsID DESC";
+		String SQL = "SELECT bbs_num FROM managebbs ORDER BY bbs_num DESC";
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
 			rs = pstmt.executeQuery();
@@ -53,16 +52,15 @@ public class ManageBbsDAO {
 		return -1; //데이터베이스오류
 	}
 	
-	public int write(String bbsTitle, String userID, String bbsContent) {
-		String SQL = "INSERT INTO managebbs (bbsID, bbsTitle, userID, bbsDate, bbsContent, bbsAvailable) VALUES(?, ?, ?, ?, ?, ?)";
+	public int write(String bbs_name, String bbs_manager, String bbs_start, String bbs_arrival) {
+		String SQL = "INSERT INTO managebbs (bbs_num, bbs_name, bbs_manager, bbs_start, bbs_arrival) VALUES(?, ?, ?, ?, ?)";
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
 			pstmt.setInt(1, getNext());
-			pstmt.setString(2, bbsTitle);
-			pstmt.setString(3, userID);
-			pstmt.setString(4, getDate());
-			pstmt.setString(5, bbsContent);
-			pstmt.setInt(6,1);
+			pstmt.setString(2, bbs_name);
+			pstmt.setString(3, bbs_manager);
+			pstmt.setString(4, bbs_start);
+			pstmt.setString(5, bbs_arrival);
 			return pstmt.executeUpdate();
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -72,7 +70,7 @@ public class ManageBbsDAO {
 
 
 	public ArrayList<ManageBbs> getList(int pageNumber){
-		String SQL = "SELECT * FROM managebbs WHERE bbsID < ? AND bbsAvailable = 1 ORDER BY bbsID DESC LIMIT 10;";
+		String SQL = "SELECT * FROM managebbs WHERE bbs_num < ?  ORDER BY bbs_num DESC LIMIT 10;";
 		ArrayList<ManageBbs> list = new ArrayList<ManageBbs>();
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
@@ -80,12 +78,11 @@ public class ManageBbsDAO {
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				ManageBbs managebbs = new ManageBbs();
-				managebbs.setBbsID(rs.getInt(1));
-				managebbs.setBbsTitle(rs.getString(2));
-				managebbs.setUserID(rs.getString(3));
-				managebbs.setBbsDate(rs.getString(4));
-				managebbs.setBbsContent(rs.getString(5));
-				managebbs.setBbsAvailable(rs.getInt(6));
+				managebbs.setBbs_num(rs.getInt(1));
+				managebbs.setBbs_name(rs.getString(2));
+				managebbs.setBbs_manager(rs.getString(3));
+				managebbs.setBbs_start(rs.getString(4));
+				managebbs.setBbs_arrival(rs.getString(5));
 				list.add(managebbs);				
 			}			
 		}catch(Exception e) {
@@ -94,7 +91,7 @@ public class ManageBbsDAO {
 		return list; //데이터베이스오류
 	}
 	public boolean nextPage(int pageNumber) {
-		String SQL = "SELECT * FROM managebbs WHERE bbsID < ? AND bbsAvailable = 1";
+		String SQL = "SELECT * FROM managebbs WHERE bbs_num < ? ";
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
 			pstmt.setInt(1, getNext() - (pageNumber - 1)*10);
@@ -109,20 +106,19 @@ public class ManageBbsDAO {
 	}
 
 
- public ManageBbs getmanagebbs(int bbsID) {
-	String SQL = "SELECT * FROM managebbs WHERE bbsID = ?";
+ public ManageBbs getmanagebbs(int bbs_num) {
+	String SQL = "SELECT * FROM managebbs WHERE bbs_num = ?";
 	try {
 		PreparedStatement pstmt = conn.prepareStatement(SQL);
-		pstmt.setInt(1, bbsID);
+		pstmt.setInt(1, bbs_num);
 		rs = pstmt.executeQuery();
 		if (rs.next()) {
 			ManageBbs managebbs = new ManageBbs();
-			managebbs.setBbsID(rs.getInt(1));
-			managebbs.setBbsTitle(rs.getString(2));
-			managebbs.setUserID(rs.getString(3));
-			managebbs.setBbsDate(rs.getString(4));
-			managebbs.setBbsContent(rs.getString(5));
-			managebbs.setBbsAvailable(rs.getInt(6));
+			managebbs.setBbs_num(rs.getInt(1));
+			managebbs.setBbs_name(rs.getString(2));
+			managebbs.setBbs_manager(rs.getString(3));
+			managebbs.setBbs_start(rs.getString(4));
+			managebbs.setBbs_arrival(rs.getString(5));
 			return managebbs;
 		}			
 	}catch(Exception e) {
@@ -131,16 +127,14 @@ public class ManageBbsDAO {
 	return null; 
  	}
  
- 	public int update(String bbsTitle, String userID, String bbsContent, String bbsWho, String bbsWhere) {
+ 	public int update(String bbs_name, String bbs_manager, String bbs_start, String bbs_arrival) {
  		String SQL = "UPDATE managebbs SET bbsTitle =?, bbsContent = ? WHERE bbsID = ?";
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
-			pstmt.setString(1, bbsTitle);
-			pstmt.setString(2, userID);
-			pstmt.setString(3, bbsContent);
-			pstmt.setString(4, bbsWho);
-			pstmt.setString(5, bbsWhere);
-			pstmt.setInt(6, 1);
+			pstmt.setString(1, bbs_name);
+			pstmt.setString(2, bbs_manager);
+			pstmt.setString(3, bbs_start);
+			pstmt.setString(4, bbs_arrival);
 			return pstmt.executeUpdate();
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -148,11 +142,11 @@ public class ManageBbsDAO {
 		return -1; //데이터베이스 오류 		
  	}
  	
- 	public int delete(int bbsID) {
- 		String SQL = "UPDATE managebbs SET bbsAvailable = 0 WHERE bbsID =?";
+ 	public int delete(int bbs_num) {
+ 		String SQL = "UPDATE managebbs WHERE bbs_num =?";
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
-			pstmt.setInt(1, bbsID);
+			pstmt.setInt(1, bbs_num);
 			return pstmt.executeUpdate();
 		}catch(Exception e) {
 			e.printStackTrace();
