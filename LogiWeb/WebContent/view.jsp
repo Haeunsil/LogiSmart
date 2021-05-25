@@ -16,9 +16,9 @@
 </head>
 <body>
 	<%
-		String userID = null;
-		if (session.getAttribute("userID") != null) {
-			userID = (String) session.getAttribute("userID");
+		String m_ID = null;
+		if (session.getAttribute("m_ID") != null) {
+			m_ID = (String) session.getAttribute("m_ID");
 		}
 		int Bbs_num = 0;
 		if(request.getParameter("Bbs_num") != null){
@@ -54,7 +54,7 @@
 	 	<li><a href="manage_carrier.jsp">운반자현황</a></li>
 	 	</ul>
 	 	<%
-	 		if(userID == null){
+	 		if(m_ID == null){
 	 	%>
 	 	<ul class="nav navbar-nav navbar-right">
 	 		<li class="dropdown">
@@ -133,7 +133,7 @@
 			</table>
 			<a href="manage_bbs.jsp" class="btn btn-primary">목록</a>
 			<%
-				if(userID != null && userID.equals(managebbs.getBbs_name())){
+				if(m_ID != null && m_ID.equals(managebbs.getBbs_name())){
 			%>
 				<a href="update.jsp?Bbs_num=<%= Bbs_num %>" class="btn btn-primary">수정</a>
 				<a href="deleteAction.jsp?Bbs_num=<%= Bbs_num%>" class="btn btn-primary">삭제</a>

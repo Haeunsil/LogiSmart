@@ -1,9 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <%@ page import="java.io.PrintWriter" %>
-<%@ page import="manager.Manager" %>
-<%@ page import="manager.ManagerDAO" %>
+<%@ page import="managebbs.ManageBbs" %>
+<%@ page import="managebbs.ManageBbsDAO" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import ="java.net.URLEncoder" %>
+<%@ page import="java.sql.*" %>
+<%@ page import="java.sql.DriverManager,
+                   java.sql.Connection,
+                   java.sql.Statement,
+                   java.sql.ResultSet,
+                   java.sql.SQLException" %>
+<%@ page import="manager.Manager" %>
+<%@ page import="manager.ManagerDAO" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -53,7 +61,7 @@
 	 	<li><a href="main.jsp">메인</a></li>
 	 	<li><a href="manage_Accept.jsp">운반수락</a></li>
 	 	<li><a href="manage_bbs.jsp">운반현황</a></li>
-	 	<li><a href="manage_manager.jsp">관리자현황</a></li>
+	 	<li class="active"><a href="manage_manager.jsp">관리자현황</a></li>
 	 	<li><a href="manage_carrier.jsp">운반자현황</a></li>
 	 	</ul>
 	 	<%
@@ -66,7 +74,7 @@
 	 				aria-expanded="false">관리자 접속하기<span class="caret"></span></a>
 	 				<ul class="dropdown-menu">
 	 				<li><a href="login.jsp">로그인</a></li>
-	 				<li><a href="join.jsp">관리자추가</a></li>
+	 				<li><a href="join.jsp">관리자가입</a></li>
 	 			</ul>
 	 		</li>
 	 	</ul>
@@ -113,64 +121,48 @@
 						<th style="background-color: #eeeee; text-align: center;">이름</th>
 						<th style="background-color: #eeeee; text-align: center;">성별</th>
 						<th style="background-color: #eeeee; text-align: center;">핸드폰번호</th>
+						<th style="background-color: #eeeee; text-align: center;">선택</th>
 					</tr>
 				</thead>
 				
 				<tbody>
- 				<%	
- 					ManagerDAO managerDAO = new ManagerDAO();
-					ArrayList<Manager> list = managerDAO.getList(pageNumber);
-					System.out.println("============================> "+list.size());
-					for(int i = 0; i < list.size(); i++){	
-						if(i==10) break;
-				%>
-					<tr>
-						<td><%= list.get(i).getm_ID() %></td>
-						<td><%= list.get(i).getm_Password() %></td>
-						<td><%= list.get(i).getm_Name() %></td>
-						<td><%= list.get(i).getm_Gender() %></td>
-						<td><%= list.get(i).getm_Phone() %></td>
-					</tr>
-					<% 
-						}
-					%>
-				</tbody>				
-			</table>
+
+
 			<%
-				if(pageNumber <=0){
-			%>
-			
-			<a class="btn btn-success disabled">이전</a>
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			String dbUrl="jdbc:mysql://logismart.cafe24.com/logismart?characterEncoding=UTF-8&serverTimezone=UTC";
+			String dbUser="logismart";
+			String dbpass="Logi2017253012";
+			Connection con=DriverManager.getConnection(dbUrl, dbUser, dbpass);
+			String sql="select * from manager";
+			PreparedStatement pstmt=con.prepareStatement(sql);
+			ResultSet rs=pstmt.executeQuery();
+			%>	
 			
 			<%
-				} else {
+			while(rs.next()){
 			%>
-			
-			<a href="manage_bbs.jsp?searchType=<%= URLEncoder.encode(searchType, "UTF-8") %>&search=<%= URLEncoder.encode(search, "UTF-8") %>&pageNumber=<%= pageNumber - 1 %>" class="btn btn-success">이전</a>
+			<tr>
+			<td><%=rs.getString("m_ID")%></td>
+			<td><%=rs.getString("m_Password")%> </td>
+			<td><%=rs.getString("m_Name")%> </td>
+			<td><%=rs.getString("m_Gender")%> </td>
+			<td><%=rs.getString("m_Phone")%> </td>
+			<td><input type='checkbox' name='check' value=rs.getInt("m_ID")/></a></td>
+			</tr>
 			<%
-				} 
+			}
 			%>
-			<%
-				if(list.size() < 10){
-			%>
+
 			
-			<a class="btn btn-success disabled">다음</a>
-			
-			<%
-				} else {
-					
-			%>
-			
-			<a href="manage_bbs.jsp?searchType=<%= URLEncoder.encode(searchType, "UTF-8") %>&search=<%= URLEncoder.encode(search, "UTF-8") %>&pageNumber=<%= pageNumber + 1 %>" class="btn btn-success">다음</a>
-			<%
-				} 
-			%>
-			
-			<a href="join.jsp" class="btn btn-primary pull-right">관리자 삭제</a>
-			<a href="join.jsp" class="btn btn-primary pull-right">관리자 추가</a>
+
 			
 			
 		</div>
+		
 	</div>
+	
 </body>
+			<a href="ManagerdeleteAction.jsp" class="btn btn-primary pull-right">관리자 삭제</a>
+			<a href="Addmanager.jsp" class="btn btn-primary pull-right">관리자 추가</a>
 </html>

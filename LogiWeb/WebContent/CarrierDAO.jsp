@@ -4,7 +4,7 @@
     pageEncoding="UTF-8" %>
     
 <%
-	String jdbcDriver = "jdbc:mysql://localhost/logismart?characterEncoding=UTF-8&serverTimezone=UTC";
+	String jdbcDriver = "jdbc:mysql://logismart.cafe24.com/logismart?characterEncoding=UTF-8&serverTimezone=UTC";
 	String dbUser = "logismart";
 	String dbPass = "Logi2017253012";
 	
@@ -15,11 +15,13 @@
 	
 	try {
 		request.setCharacterEncoding("UTF-8");
-		String name = request.getParameter("name");
-		String birth = request.getParameter("birth");
-		String phone = request.getParameter("phone");
+		String name = request.getParameter("strings1");
+		String birth = request.getParameter("strings2");
+		String phone = request.getParameter("strings3");
 		
-		String driver = "com.mysql.cj.jdbc.Driver";
+		JSONObject jObject = new JSONObject();
+		
+		String driver = "com.mysql.jdbc.Driver";
 		Class.forName(driver);
 		conn = DriverManager.getConnection(jdbcDriver, dbUser, dbPass);
 		stmt = conn.createStatement();
@@ -44,15 +46,18 @@
 		
 		int insert = pstmt.executeUpdate();
 		
-		JSONObject jObject = new JSONObject();
-		
 		if (insert > 0) {
 			System.out.println("Insert Complete");
+			jObject.put("result", "success");
 		 	jObject.put("name", name);
 			jObject.put("birth", birth);
 			jObject.put("phone", phone);
 			jObject.put("id", id);
 			
+		}
+		else {
+			System.out.println("Insert Fail");
+			jObject.put("result", "fail");
 		}
 		System.out.println(jObject.toJSONString());
 		out.println(jObject.toJSONString());

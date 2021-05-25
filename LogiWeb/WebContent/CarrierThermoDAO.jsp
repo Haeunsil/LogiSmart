@@ -4,7 +4,7 @@
     pageEncoding="UTF-8" %>
 
 <%
-	String jdbcDriver = "jdbc:mysql://localhost/logismart?characterEncoding=UTF-8&serverTimezone=UTC";
+	String jdbcDriver = "jdbc:mysql://logismart.cafe24.com/logismart?characterEncoding=UTF-8&serverTimezone=UTC";
 	String dbUser = "logismart";
 	String dbPass = "Logi2017253012";
 	
@@ -28,7 +28,7 @@
 		
 		pstmt = conn.prepareStatement(insert_thermo);
 		pstmt.setInt(1, Integer.parseInt(id));
-		pstmt.setString(2, thermo);
+		pstmt.setInt(2, Integer.parseInt(thermo));
 		
 		int insert = pstmt.executeUpdate();
 		

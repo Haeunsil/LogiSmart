@@ -39,7 +39,7 @@
 	 				aria-expanded="false">관리자 접속하기<span class="caret"></span></a>
 	 			<ul class="dropdown-menu">
 	 				<li><a href="login.jsp">로그인</a></li>
-	 				<li class="active"><a href="join.jsp">관리자추가</a></li>
+	 				<li class="active"><a href="join.jsp">관리자가입</a></li>
 	 			</ul>
 	 		</li>
 	 	</ul>
@@ -50,7 +50,7 @@
 		<div class="col-lg-4">
 			<div class="jumbotron" style="padding-top : 20px;">
 			<form method="post" action="joinAction.jsp">
-				<h3 style"text-align: center;">관리자 추가 화면</h3>
+				<h3 style"text-align: center;">관리자 가입 화면</h3>
 				<div class="form-group">
 					<input type="text" class="form-control" placeholder="아이디" name="m_ID" maxlength="20">
 				</div>
@@ -72,7 +72,7 @@
 				<div class="form-group">
 					<input type="text" class="form-control" placeholder="핸드폰" name="m_Phone" maxlength="50">
 				</div>
-				<input type="submit" class="btn btn-primary form-control" value="회원가입">
+				<input type="submit" class="btn btn-primary form-control" value="관리자 가입">
 			</form>
 			</div>
 		</div>

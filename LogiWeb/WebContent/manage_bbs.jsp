@@ -4,6 +4,15 @@
 <%@ page import="managebbs.ManageBbsDAO" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import ="java.net.URLEncoder" %>
+<%@ page import="java.sql.*" %>
+<%@ page import="java.sql.DriverManager,
+                   java.sql.Connection,
+                   java.sql.Statement,
+                   java.sql.ResultSet,
+                   java.sql.SQLException" %>
+<%@ page import="manager.Manager" %>
+<%@ page import="manager.ManagerDAO" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -52,7 +61,7 @@
 	 	<ul class="nav navbar-nav">
 	 	<li><a href="main.jsp">메인</a></li>
 	 	<li><a href="manage_Accept.jsp">운반수락</a></li>
-	 	<li><a href="manage_bbs.jsp">운반현황</a></li>
+	 	<li class="active"><a href="manage_bbs.jsp">운반현황</a></li>
 	 	<li><a href="manage_manager.jsp">관리자현황</a></li>
 	 	<li><a href="manage_carrier.jsp">운반자현황</a></li>
 	 	</ul>
@@ -66,7 +75,7 @@
 	 				aria-expanded="false">관리자 접속하기<span class="caret"></span></a>
 	 			<ul class="dropdown-menu">
 	 				<li><a href="login.jsp">로그인</a></li>
-	 				<li><a href="join.jsp">관리자추가</a></li>
+	 				<li><a href="join.jsp">관리자가입</a></li>
 	 			</ul>
 	 		</li>
 	 	</ul>
@@ -108,70 +117,48 @@
 			<table class="table table-striped" style ="text-align: center; border: 1px solid #dddddd">
 				<thead>
 					<tr>
-						<th style="background-color: #eeeee; text-align: center;">번호</th>
 						<th style="background-color: #eeeee; text-align: center;">물품 이름</th>
 						<th style="background-color: #eeeee; text-align: center;">담당관리자</th>
+						<th style="background-color: #eeeee; text-align: center;">담당운반자</th>
 						<th style="background-color: #eeeee; text-align: center;">출발지</th>
 						<th style="background-color: #eeeee; text-align: center;">도착지</th>
-						<th style="background-color: #eeeee; text-align: center;">상세정보</th>
+						<th style="background-color: #eeeee; text-align: center;">온도</th>
+						<th style="background-color: #eeeee; text-align: center;">위치</th>
 					</tr>
 				</thead>
 				
-				<tbody>
- 				<%			
- 					ManageBbsDAO managebbsDAO = new ManageBbsDAO();
-					ArrayList<ManageBbs> list = managebbsDAO.getList(pageNumber);
-					System.out.println("============================> "+list.size());
-					for(int i = 0; i < list.size(); i++){	
-						if(i==10) break;
-				%>
-					<tr>
-						<td><%= list.get(i).getBbs_num() %></td>
-						<td><a href="view.jsp?Bbs_num=<%= list.get(i).getBbs_num() %>"><%= list.get(i).getBbs_name() %></a></td>
-						<td><%= list.get(i).getBbs_manager() %></td>
-						<td><%= list.get(i).getBbs_start() %></td>
-						<td><%= list.get(i).getBbs_arrival() %></td>
-						<td>상세정보</td>
-					</tr>
-					<% 
-						}
-					%>
-				</tbody>				
-			</table>
+
 			<%
-				if(pageNumber <=0){
-			%>
-			
-			<a class="btn btn-success disabled">이전</a>
-			
-			<%
-				} else {
-			%>
-			
-			<a href="manage_bbs.jsp?searchType=<%= URLEncoder.encode(searchType, "UTF-8") %>&search=<%= URLEncoder.encode(search, "UTF-8") %>&pageNumber=<%= pageNumber - 1 %>" class="btn btn-success">이전</a>
-			<%
-				} 
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			String dbUrl="jdbc:mysql://logismart.cafe24.com/logismart?characterEncoding=UTF-8&serverTimezone=UTC";
+			String dbUser="logismart";
+			String dbpass="Logi2017253012";
+			Connection con=DriverManager.getConnection(dbUrl, dbUser, dbpass);
+			String sql="select * from managebbs LEFT OUTER JOIN temper ON bbs_num = t_id JOIN locate ON bbs_num = l_id ";
+			PreparedStatement pstmt=con.prepareStatement(sql);
+			ResultSet rs=pstmt.executeQuery();
 			%>
 			<%
-				if(list.size() < 10){
-			%>
+				
+			%>	
 			
-			<a class="btn btn-success disabled">다음</a>
 			
 			<%
-				} else {
+			while(rs.next()){
+			%>
+			<tr>
+			<td><%=rs.getInt("bbs_num")%> </td>
+			<td><%=rs.getString("bbs_name")%></td>
+			<td><%=rs.getString("bbs_manager")%> </td>
+			<td><%=rs.getString("bbs_start")%> </td>
+			<td><%=rs.getString("bbs_arrival")%> </td>
+			<td><%=rs.getInt("t_data")%> </td>
+			<td><%=rs.getString("l_wido")%> </td>
+			</tr>
+			<%
+			}
+			%>
 					
-			%>
-			
-			<a href="manage_bbs.jsp?searchType=<%= URLEncoder.encode(searchType, "UTF-8") %>&search=<%= URLEncoder.encode(search, "UTF-8") %>&pageNumber=<%= pageNumber + 1 %>" class="btn btn-success">다음</a>
-			<%
-				} 
-			%>
-			
-			<a href="write.jsp" class="btn btn-primary pull-right">물품 삭제</a>
-			<a href="write.jsp" class="btn btn-primary pull-right">물품 등록</a>
-			
-		</div>
-	</div>
+
 </body>
 </html>
