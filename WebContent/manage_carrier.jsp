@@ -59,7 +59,7 @@
 	 	<li><a href="manage_Accept.jsp">운반수락</a></li>
 	 	<li><a href="manage_bbs.jsp">운반현황</a></li>
 	 	<li><a href="manage_manager.jsp">관리자현황</a></li>
-	 	<li><a href="manage_carrier.jsp">운반자현황</a></li>
+	 	<li class="active"><a href="manage_carrier.jsp">운반자현황</a></li>
 	 	</ul>
 	 	<%
 	 		if(userID == null){
@@ -71,7 +71,7 @@
 	 				aria-expanded="false">관리자 접속하기<span class="caret"></span></a>
 	 				<ul class="dropdown-menu">
 	 				<li><a href="login.jsp">로그인</a></li>
-	 				<li><a href="join.jsp">관리자추가</a></li>
+	 				<li><a href="join.jsp">관리자가입</a></li>
 	 			</ul>
 	 		</li>
 	 	</ul>
@@ -121,55 +121,32 @@
 					</tr>
 				</thead>           
  
-		 <tbody>         
-		 
-		      
+   
+				      
 			<%
-			
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			
-			String dbUrl="jdbc:mysql://localhost/logismart?characterEncoding=UTF-8&serverTimezone=UTC";
-			
+			String dbUrl="jdbc:mysql://logismart.cafe24.com/logismart?characterEncoding=UTF-8&serverTimezone=UTC";
 			String dbUser="logismart";
-			
 			String dbpass="Logi2017253012";
-			
 			Connection con=DriverManager.getConnection(dbUrl, dbUser, dbpass);
-			
 			String sql="select * from carriers";
-			
 			PreparedStatement pstmt=con.prepareStatement(sql);
-			
-			 
-			
 			ResultSet rs=pstmt.executeQuery();
-			
-			 
-			
-			%>
-			
-			 
-			
-	
+			%>	
 			
 			<%
-			
 			while(rs.next()){
-			
-			%>
-			
-			<tr><td><%=rs.getInt("c_id")%> </td>
-			
+			%>	
+			<tr>
+			<td><%=rs.getInt("c_id")%> </td>
 			<td><%=rs.getString("c_name")%></td>
-			
 			<td><%=rs.getString("c_birth")%> </td>
-			
 			<td><%=rs.getString("c_phone")%> </td>
 			<td>비고 </td>
-			</tr><%
+			</tr>
 			
+			<%
 			}
-			
 			%>
 
  

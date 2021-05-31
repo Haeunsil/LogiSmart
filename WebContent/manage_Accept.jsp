@@ -4,6 +4,14 @@
 <%@ page import="managebbs.ManageBbsDAO" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import ="java.net.URLEncoder" %>
+<%@ page import="java.sql.*" %>
+<%@ page import="java.sql.DriverManager,
+                   java.sql.Connection,
+                   java.sql.Statement,
+                   java.sql.ResultSet,
+                   java.sql.SQLException" %>
+<%@ page import="manager.Manager" %>
+<%@ page import="manager.ManagerDAO" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -51,7 +59,7 @@
 	 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 	 	<ul class="nav navbar-nav">
 	 	<li><a href="main.jsp">메인</a></li>
-	 	<li><a href="manage_Accept.jsp">운반수락</a></li>
+	 	<li class="active"><a href="manage_Accept.jsp">운반수락</a></li>
 	 	<li><a href="manage_bbs.jsp">운반현황</a></li>
 	 	<li><a href="manage_manager.jsp">관리자현황</a></li>
 	 	<li><a href="manage_carrier.jsp">운반자현황</a></li>
@@ -118,55 +126,32 @@
 				</thead>
 				
 				<tbody>
- 				<%			
- 					ManageBbsDAO managebbsDAO = new ManageBbsDAO();
-					ArrayList<ManageBbs> list = managebbsDAO.getList(pageNumber);
-					System.out.println("============================> "+list.size());
-					for(int i = 0; i < list.size(); i++){	
-						if(i==10) break;
-				%>
-					<tr>
-						<td><%= list.get(i).getBbsID() %></td>
-						<td><a href="view.jsp?bbsID=<%= list.get(i).getBbsID() %>"><%= list.get(i).getBbsTitle() %></a></td>
-						<td><%= list.get(i).getBbsDate().substring(0,11) + list.get(i).getBbsDate().substring(11,13)+"시"+list.get(i).getBbsDate().substring(14,16)+"분" %></td>
-						<td><%= list.get(i).getUserID() %></td>
-						<td>미승인</td>
-						<td><input type='checkbox' name='check' value=list.get(i).getBbsID()/></a></td>
+				<%
+					Class.forName("com.mysql.cj.jdbc.Driver");
+					String dbUrl="jdbc:mysql://logismart.cafe24.com/logismart?characterEncoding=UTF-8&serverTimezone=UTC";
+					String dbUser="logismart";
+					String dbpass="Logi2017253012";
+					Connection con=DriverManager.getConnection(dbUrl, dbUser, dbpass);
+					String sql="select * from managebbs";
+					PreparedStatement pstmt=con.prepareStatement(sql);
+					ResultSet rs=pstmt.executeQuery();
+					%>	
 					
-					</tr>
-					<% 
-						}
+					<%
+					while(rs.next()){
 					%>
-				</tbody>				
-			</table>
-			<%
-				if(pageNumber <=0){
-			%>
-			
-			<a class="btn btn-success disabled">이전</a>
-			
-			<%
-				} else {
-			%>
-			
-			<a href="manage_bbs.jsp?searchType=<%= URLEncoder.encode(searchType, "UTF-8") %>&search=<%= URLEncoder.encode(search, "UTF-8") %>&pageNumber=<%= pageNumber - 1 %>" class="btn btn-success">이전</a>
-			<%
-				} 
-			%>
-			<%
-				if(list.size() < 10){
-			%>
-			
-			<a class="btn btn-success disabled">다음</a>
-			<%
-				} else {
-					
-			%>
-			
-			<a href="manage_bbs.jsp?searchType=<%= URLEncoder.encode(searchType, "UTF-8") %>&search=<%= URLEncoder.encode(search, "UTF-8") %>&pageNumber=<%= pageNumber + 1 %>" class="btn btn-success">다음</a>
-			<%
-				} 
-			%>
+					<tr>
+							<td><%=rs.getInt("bbs_num")%> </td>
+							<td><%=rs.getString("bbs_name")%></td>
+							<td><%=rs.getString("bbs_manager")%> </td>
+							<td><%=rs.getString("bbs_start")%> </td>
+							<td><%=rs.getString("bbs_arrival")%> </td>
+							<td><input type='checkbox' name='check' value=rs.getInt("bbs_num")/></a></td>
+					</tr>
+					<%
+					}
+					%>
+
 			<a href="write.jsp" class="btn btn-primary pull-right">거절</a>
 			<a href="write.jsp" class="btn btn-primary pull-right">수락</a>
 		</div>

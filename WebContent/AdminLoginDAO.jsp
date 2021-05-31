@@ -2,61 +2,44 @@
 <%@ page import="org.json.simple.JSONObject" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" %>
-    
+
 <%
 	String jdbcDriver = "jdbc:mysql://logismart.cafe24.com/logismart?characterEncoding=UTF-8&serverTimezone=UTC";
 	String dbUser = "logismart";
 	String dbPass = "Logi2017253012";
 	
 	Connection conn = null;
-	Statement stmt = null;
 	PreparedStatement pstmt = null;
 	ResultSet result = null;
 	
 	try {
 		request.setCharacterEncoding("UTF-8");
-		String name = request.getParameter("strings1");
-		String birth = request.getParameter("strings2");
-		String phone = request.getParameter("strings3");
+		String id = request.getParameter("strings1");
+		String pw = request.getParameter("strings2");
 		
 		JSONObject jObject = new JSONObject();
 		
 		String driver = "com.mysql.jdbc.Driver";
 		Class.forName(driver);
 		conn = DriverManager.getConnection(jdbcDriver, dbUser, dbPass);
-		stmt = conn.createStatement();
 		
-		String max_id = "SELECT IFNULL(MAX(c_id) + 1, 1) FROM carriers;";
-		result = stmt.executeQuery(max_id);
-		
-		System.out.println("name: " + name);
-		
-		result.next();
-		
-		int id = result.getInt(1);
 		System.out.println("id: " + id);
 		
-		String insert_carrier = "INSERT INTO carriers(c_id, c_name, c_birth, c_phone) VALUES(?, ?, ?, ?)";
+		String search_idpw = "SELECT * FROM manager WHERE (m_ID = ?) and (m_Password = ?);";
 		
-		pstmt = conn.prepareStatement(insert_carrier);
-		pstmt.setInt(1, id);
-		pstmt.setString(2, name);
-		pstmt.setString(3, birth);
-		pstmt.setString(4, phone);
+		pstmt = conn.prepareStatement(search_idpw);
+		pstmt.setString(1, id);
+		pstmt.setString(2, pw);
 		
-		int insert = pstmt.executeUpdate();
+		result = pstmt.executeQuery();
 		
-		if (insert > 0) {
-			System.out.println("Insert Complete");
+		if (result.next()) {
+			System.out.println("Search Complete");
 			jObject.put("result", "success");
-		 	jObject.put("name", name);
-			jObject.put("birth", birth);
-			jObject.put("phone", phone);
-			jObject.put("id", id);
-			
+			jObject.put("name", result.getString("m_Name"));
 		}
 		else {
-			System.out.println("Insert Fail");
+			System.out.println("Search Fail");
 			jObject.put("result", "fail");
 		}
 		System.out.println(jObject.toJSONString());
@@ -68,7 +51,6 @@
 		try {
 			result.close();
 			pstmt.close();
-			stmt.close();
 			conn.close();
 		} catch (Exception e) {
 			e.printStackTrace();

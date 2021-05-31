@@ -1,15 +1,19 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
-<%@ page import="managebbs.ManageBbsDAO"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ page import="manager.ManagerDAO"%>
 <%@ page import="java.io.PrintWriter"%>
-<% request.setCharacterEncoding("UTF-8"); %>
-<jsp:useBean id="managebbs" class="managebbs.ManageBbs" scope="page" />
-<jsp:setProperty name="managebbs" property="bbsTitle" />
-<jsp:setProperty name="managebbs" property="bbsContent" />
+<%
+	request.setCharacterEncoding("UTF-8");
+%>
+<jsp:useBean id="manager" class="manager.Manager" scope="page" />
+<jsp:setProperty name="manager" property="m_ID" />
+<jsp:setProperty name="manager" property="m_Password" />
+
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Logi Manager Web</title>
+<meta charset="EUC-KR">
+<title>Logi Mananger Web</title>
 </head>
 <body>
 	<%
@@ -24,19 +28,24 @@
 			script.println("location.href = 'login.jsp'");
 			script.println("</script>");
 		} else {
-			if (managebbs.getBbs_name() == null || managebbs.getBbs_manager() == null ) {
+			int m_ID = 0;
+			if(request.getParameter("m_ID") != null){
+				m_ID = Integer.parseInt(request.getParameter("m_ID"));
+			}
+			if(m_ID ==0){
 				PrintWriter script = response.getWriter();
 				script.println("<script>");
-				script.println("alert('입력이 되지 않은 사항이 있습니다.')");
-				script.println("history.back()");
+				script.println("alert('유효하지 않은 글입니다..')");
+				script.println("location.href = 'manage_bbs.jsp'");
 				script.println("</script>");
-			} else {
-				ManageBbsDAO managebbsDAO = new ManageBbsDAO();
-				int result = managebbsDAO.write(managebbs.getBbs_name(), managebbs.getBbs_manager(), managebbs.getBbs_start(), managebbs.getBbs_arrival());
+			}
+				ManagerDAO managerDAO = new ManagerDAO();
+				
+				int result = managerDAO.delete(m_ID);
 				if (result == -1) {
 					PrintWriter script = response.getWriter();
 					script.println("<script>");
-					script.println("alert('등록하기에 실패했습니다.')");
+					script.println("alert('관리자 삭제에 실패하였습니다.')");
 					script.println("history.back()");
 					script.println("</script>");
 				} else {
@@ -45,7 +54,6 @@
 					script.println("location.href = 'manage_bbs.jsp'");
 					script.println("</script>");
 				}
-			}
 		}
 	%>
 </body>
