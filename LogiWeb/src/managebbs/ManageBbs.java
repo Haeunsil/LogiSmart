@@ -4,6 +4,7 @@ public class ManageBbs {
 	private int bbs_num;
 	private String bbs_name;
 	private String bbs_manager;
+	private int bbs_carrierID;
 	private String bbs_start;
 	private String bbs_arrival;
 	private int bbs_upper;
@@ -12,7 +13,7 @@ public class ManageBbs {
 	public int getBbs_num() {
 		return bbs_num;
 	}
-	public void setBbs_num(int bbsnum) {
+	public void setBbs_num(int bbs_num) {
 		this.bbs_num = bbs_num;
 	}
 	public String getBbs_name() {
@@ -26,6 +27,12 @@ public class ManageBbs {
 	}
 	public void setBbs_manager(String bbs_manager) {
 		this.bbs_manager = bbs_manager;
+	}
+	public int getBbs_carrierID() {
+		return bbs_carrierID;
+	}
+	public void setBbs_carrierID(int bbs_carrierID) {
+		this.bbs_carrierID = bbs_carrierID;
 	}
 	public String getBbs_start() {
 		return bbs_start;
