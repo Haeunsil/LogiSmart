@@ -13,30 +13,31 @@
 	
 	try {
 		request.setCharacterEncoding("UTF-8");
-		String id = request.getParameter("strings1");
-		String LAT = request.getParameter("strings2");
-		String LON = request.getParameter("strings3");
+		String name = request.getParameter("strings1");
+		String token = request.getParameter("strings2");
 		
 		JSONObject jObject = new JSONObject();
 		
 		String driver = "com.mysql.jdbc.Driver";
 		Class.forName(driver);
 		conn = DriverManager.getConnection(jdbcDriver, dbUser, dbPass);
-		String insert_gps = "INSERT INTO locate(l_id, l_wido, l_gyeongdo, l_time) VALUES(?, ?, ?, NOW())";
 		
-		pstmt = conn.prepareStatement(insert_gps);
-		pstmt.setInt(1, Integer.parseInt(id));
-		pstmt.setString(2, LAT);
-		pstmt.setString(3, LON);
+		System.out.println("name: " + name);
+		
+		String insert_token = "UPDATE manager SET m_Token = ? WHERE m_Name = ?;";
+		
+		pstmt = conn.prepareStatement(insert_token);
+		pstmt.setString(2, name);
+		pstmt.setString(1, token);
 		
 		int insert = pstmt.executeUpdate();
 		
 		if (insert > 0) {
-			System.out.println("Insert Complete");
+			System.out.println("Update Complete");
 			jObject.put("result", "success");
 		}
 		else {
-			System.out.println("Insert Fail");
+			System.out.println("Update Fail");
 			jObject.put("result", "fail");
 		}
 		System.out.println(jObject.toJSONString());

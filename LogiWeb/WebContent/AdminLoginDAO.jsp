@@ -4,7 +4,7 @@
     pageEncoding="UTF-8" %>
 
 <%
-	String jdbcDriver = "jdbc:mysql://logismart.cafe24.com/logismart?characterEncoding=UTF-8&serverTimezone=UTC";
+	String jdbcDriver = "jdbc:mysql://localhost/logismart?characterEncoding=UTF-8&serverTimezone=UTC";
 	String dbUser = "logismart";
 	String dbPass = "Logi2017253012";
 	
@@ -36,6 +36,7 @@
 		if (result.next()) {
 			System.out.println("Search Complete");
 			jObject.put("result", "success");
+			jObject.put("name", result.getString("m_Name"));
 		}
 		else {
 			System.out.println("Search Fail");

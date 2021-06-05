@@ -1,7 +1,16 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ page import="java.io.PrintWriter" %>
+<%@ page import="manager.Manager" %>
+<%@ page import="manager.ManagerDAO" %>
 <%@ page import="managebbs.ManageBbs" %>
 <%@ page import="managebbs.ManageBbsDAO" %>
+<%@ page import="bluetooth.Bluetooth" %>
+<%@ page import="bluetooth.BluetoothDAO" %>
+<%@ page import="locate.Locate" %>
+<%@ page import="locate.LocateDAO" %>
+<%@ page import="temper.Temper" %>
+<%@ page import="temper.TemperDAO" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import ="java.net.URLEncoder" %>
 <%@ page import="java.sql.*" %>
@@ -10,8 +19,7 @@
                    java.sql.Statement,
                    java.sql.ResultSet,
                    java.sql.SQLException" %>
-<%@ page import="manager.Manager" %>
-<%@ page import="manager.ManagerDAO" %>
+
 
 <!DOCTYPE html>
 <html>
@@ -27,7 +35,7 @@
 </head>
 <body>
 	<%
-		request.setCharacterEncoding("UTF-8");
+
 		String userID = null;
 		if (session.getAttribute("userID") != null) {
 			userID = (String) session.getAttribute("userID");
@@ -44,6 +52,27 @@
 		if(request.getParameter("search") != null){
 			search = request.getParameter("search");
 		}
+		int bbs_num = 0;
+		if(request.getParameter("bbs_num") != null){
+			bbs_num = Integer.parseInt(request.getParameter("bbs_num"));
+		}
+		ManageBbs managebbs = new ManageBbsDAO().getmanageBbs(bbs_num);
+		int l_id = 0;
+		if(request.getParameter("l_id") != null){
+			l_id = Integer.parseInt(request.getParameter("l_id"));
+		}
+		Locate locate = new LocateDAO().getLocate(bbs_num);
+
+		int b_thing = 0;
+		if(request.getParameter("b_thing") != null){
+			b_thing = Integer.parseInt(request.getParameter("b_thing"));
+		}
+		Bluetooth bluetooth = new BluetoothDAO().getBluetooth(bbs_num);
+		int t_id = 0;
+		if(request.getParameter("t_id") != null){
+			t_id = Integer.parseInt(request.getParameter("t_id"));
+		}
+		Temper temper = new TemperDAO().getTemper(bbs_num);
 		
 	%>
 	<nav class="navbar navbar-default">
@@ -103,13 +132,13 @@
 		<form method="get" action="manage_bbs.jsp" class="form-inline" style="margin-bottom: 10px">
 				<select name="searchType" class="form-control">
 					<option value="전체">전체</option>
-					<option value="이름" <%if(searchType.equals("이름")) out.println("selected");%>>이름</option>
+					<option value="번호" <%if(searchType.equals("이름")) out.println("selected");%>>이름</option>
 					<option value="상태" <%if(searchType.equals("상태")) out.println("selected");%>>상태</option>
 					<option value="정보" <%if(searchType.equals("정보")) out.println("selected");%>>정보</option>
 				</select>
 				<input type="text" name="search" class="form-control" <% if(!search.equals("")) out.println("value="+ search); else out.println("placeholder=\"내용을 입력하세요\""); %>>
 				<button type="submit" class="form-control btn btn-primary">검색</button>
-			
+				<a href="manage_bbs.jsp" class="btn btn-primary pull-right">새로고침</a>
 		</form>
 	
 	
@@ -117,48 +146,36 @@
 			<table class="table table-striped" style ="text-align: center; border: 1px solid #dddddd">
 				<thead>
 					<tr>
-						<th style="background-color: #eeeee; text-align: center;">물품 이름</th>
-						<th style="background-color: #eeeee; text-align: center;">담당관리자</th>
-						<th style="background-color: #eeeee; text-align: center;">담당운반자</th>
+						<th style="background-color: #eeeee; text-align: center;">순번</th>
+						<th style="background-color: #eeeee; text-align: center;">물품이름</th>
 						<th style="background-color: #eeeee; text-align: center;">출발지</th>
 						<th style="background-color: #eeeee; text-align: center;">도착지</th>
-						<th style="background-color: #eeeee; text-align: center;">온도</th>
-						<th style="background-color: #eeeee; text-align: center;">위치</th>
+						<th style="background-color: #eeeee; text-align: center;">실시간온도위치</th>
+						<th style="background-color: #eeeee; text-align: center;">상세정보</th>
 					</tr>
 				</thead>
+				<tbody>
 				
-
-			<%
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			String dbUrl="jdbc:mysql://logismart.cafe24.com/logismart?characterEncoding=UTF-8&serverTimezone=UTC";
-			String dbUser="logismart";
-			String dbpass="Logi2017253012";
-			Connection con=DriverManager.getConnection(dbUrl, dbUser, dbpass);
-			String sql="select * from managebbs LEFT OUTER JOIN temper ON bbs_num = t_id JOIN locate ON bbs_num = l_id ";
-			PreparedStatement pstmt=con.prepareStatement(sql);
-			ResultSet rs=pstmt.executeQuery();
-			%>
-			<%
-				
-			%>	
-			
-			
-			<%
-			while(rs.next()){
-			%>
-			<tr>
-			<td><%=rs.getInt("bbs_num")%> </td>
-			<td><%=rs.getString("bbs_name")%></td>
-			<td><%=rs.getString("bbs_manager")%> </td>
-			<td><%=rs.getString("bbs_start")%> </td>
-			<td><%=rs.getString("bbs_arrival")%> </td>
-			<td><%=rs.getInt("t_data")%> </td>
-			<td><%=rs.getString("l_wido")%> </td>
-			</tr>
-			<%
-			}
-			%>
+ 				<%			
+ 					ManageBbsDAO managebbsDAO = new ManageBbsDAO();
+					ArrayList<ManageBbs> list = managebbsDAO.getList(searchType, search, pageNumber);
+					for(int i = 0; i < list.size(); i++){		
+				%>
+					<tr>
+						<td><%= list.get(i).getBbs_num() %></td>
+						<td><%= list.get(i).getBbs_name() %></td>
+						<td><%= list.get(i).getBbs_start() %></td>
+						<td><%= list.get(i).getBbs_arrival() %></td>
+						<td><a href="LocateView.jsp?bbs_num=<%= list.get(i).getBbs_num()%>" class="btn btn-primary pull-center" style="text-align: center">View</a></td>	
+						<td><a href="DetailView.jsp?bbs_num=<%= list.get(i).getBbs_num()%>" class="btn btn-primary pull-center" style="text-align: center">View</a></td>
+					</tr>
 					
+					<%
+					}
+					%>
+
+				</tbody>
+			</table>
 
 </body>
 </html>

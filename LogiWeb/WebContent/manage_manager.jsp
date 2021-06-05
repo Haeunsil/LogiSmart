@@ -130,7 +130,7 @@
 
 			<%
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			String dbUrl="jdbc:mysql://logismart.cafe24.com/logismart?characterEncoding=UTF-8&serverTimezone=UTC";
+			String dbUrl="jdbc:mysql://localhost/logismart?characterEncoding=UTF-8&serverTimezone=UTC";
 			String dbUser="logismart";
 			String dbpass="Logi2017253012";
 			Connection con=DriverManager.getConnection(dbUrl, dbUser, dbpass);
