@@ -40,7 +40,11 @@
 		if(request.getParameter("search") != null){
 			search = request.getParameter("search");
 		}
-		
+		String m_ID = null;
+		if (session.getAttribute("m_ID") != null) {
+			m_ID = (String) session.getAttribute("m_ID");
+		}
+		Manager manager = new ManagerDAO().getmanager(m_ID);
 	%>
 	<nav class="navbar navbar-default">
 	 <div class="navbar-header">
@@ -61,15 +65,15 @@
 	 	<li><a href="manage_manager.jsp">관리자현황</a></li>
 	 	<li class="active"><a href="manage_carrier.jsp">운반자현황</a></li>
 	 	</ul>
-	 	<%
-	 		if(userID == null){
+		<%
+	 		if(m_ID == null){
 	 	%>
 	 	<ul class="nav navbar-nav navbar-right">
 	 		<li class="dropdown">
 	 			<a href="#" class="dropdown-toggle"
 	 				data-toggle="dropdown" role="button" aria-haspopup="true"
 	 				aria-expanded="false">관리자 접속하기<span class="caret"></span></a>
-	 				<ul class="dropdown-menu">
+	 			<ul class="dropdown-menu">
 	 				<li><a href="login.jsp">로그인</a></li>
 	 				<li><a href="join.jsp">관리자가입</a></li>
 	 			</ul>
@@ -82,7 +86,7 @@
 	 		<li class="dropdown">
 	 			<a href="#" class="dropdown-toggle"
 	 				data-toggle="dropdown" role="button" aria-haspopup="true"
-	 				aria-expanded="false">회원관리<span class="caret"></span></a>
+	 				aria-expanded="false">"<%=manager.getM_ID() %>" 님 접 속 중<span class="caret"></span></a>
 	 			<ul class="dropdown-menu">
 	 				<li><a href="logoutAction.jsp">로그아웃</a></li>
 	 			</ul>
@@ -115,9 +119,9 @@
 					<tr>
 						<th style="background-color: #eeeee; text-align: center;">순번</th>
 						<th style="background-color: #eeeee; text-align: center;">이름</th>
-						<th style="background-color: #eeeee; text-align: center;">생일</th>
+						<th style="background-color: #eeeee; text-align: center;">생년월일</th>
 						<th style="background-color: #eeeee; text-align: center;">핸드폰번호</th>
-						<th style="background-color: #eeeee; text-align: center;">비고</th>
+					
 					</tr>
 				</thead>           
  
@@ -125,7 +129,7 @@
 				      
 			<%
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			String dbUrl="jdbc:mysql://localhost/logismart?characterEncoding=UTF-8&serverTimezone=UTC";
+			String dbUrl="jdbc:mysql://logismart.cafe24.com/logismart?characterEncoding=UTF-8&serverTimezone=UTC";
 			String dbUser="logismart";
 			String dbpass="Logi2017253012";
 			Connection con=DriverManager.getConnection(dbUrl, dbUser, dbpass);
@@ -142,7 +146,7 @@
 			<td><%=rs.getString("c_name")%></td>
 			<td><%=rs.getString("c_birth")%> </td>
 			<td><%=rs.getString("c_phone")%> </td>
-			<td>비고 </td>
+			
 			</tr>
 			
 			<%

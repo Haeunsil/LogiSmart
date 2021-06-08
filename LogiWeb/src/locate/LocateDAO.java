@@ -13,7 +13,7 @@ public class LocateDAO {
 		
 		public LocateDAO() {
 			try {
-				String dbURL = "jdbc:mysql://localhost/logismart?characterEncoding=UTF-8&serverTimezone=UTC";
+				String dbURL = "jdbc:mysql://logismart.cafe24.com/logismart?characterEncoding=UTF-8&serverTimezone=UTC";
 				String dbID = "logismart";
 				String dbPassword = "Logi2017253012";
 				Class.forName("com.mysql.cj.jdbc.Driver");

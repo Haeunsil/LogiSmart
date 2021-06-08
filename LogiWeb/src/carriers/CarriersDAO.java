@@ -13,7 +13,7 @@ public class CarriersDAO {
 		
 		public CarriersDAO() {
 			try {
-				String dbURL = "jdbc:mysql://localhost/logismart?characterEncoding=UTF-8&serverTimezone=UTC";
+				String dbURL = "jdbc:mysql://logismart.cafe24.com/logismart?characterEncoding=UTF-8&serverTimezone=UTC";
 				String dbID = "logismart";
 				String dbPassword = "Logi2017253012";
 				Class.forName("com.mysql.cj.jdbc.Driver");
@@ -104,6 +104,37 @@ public class CarriersDAO {
 		e.printStackTrace();
 		}
 	return null; 
+ 	}
+ 
+ public Carriers UngetCarriers (int c_id) {
+	String SQL = "select * from carriers LEFT OUTER JOIN managebbs ON c_id = bbs_carrierID where bbs_carrierID is null";
+	try {
+		PreparedStatement pstmt = conn.prepareStatement(SQL);
+		pstmt.setInt(1, c_id);
+		rs = pstmt.executeQuery();
+		if (rs.next()) {
+			Carriers carriers = new Carriers();
+			carriers.setC_id(rs.getInt(1));
+			carriers.setC_name(rs.getString(2));
+			carriers.setC_birth(rs.getString(3));
+			carriers.setC_phone(rs.getString(4));
+			return carriers;
+		}			
+	}catch(Exception e) {
+		e.printStackTrace();
+		}
+	return null; 
+ 	}
+	public int delete(int c_id) {
+ 		String SQL = "delete from carriers where c_id =?";
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			pstmt.setInt(1, c_id);
+			return pstmt.executeUpdate();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return -1; 	//데이터베이스 오류 		
  	}
 
 }

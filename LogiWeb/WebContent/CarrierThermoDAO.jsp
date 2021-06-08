@@ -5,7 +5,7 @@
     pageEncoding="UTF-8" %>
 
 <%
-	String jdbcDriver = "jdbc:mysql://localhost/logismart?characterEncoding=UTF-8&serverTimezone=UTC";
+	String jdbcDriver = "jdbc:mysql://logismart.cafe24.com/logismart?characterEncoding=UTF-8&serverTimezone=UTC";
 	String dbUser = "logismart";
 	String dbPass = "Logi2017253012";
 	

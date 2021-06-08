@@ -34,37 +34,47 @@
 </head>
 <body>
 	<%
-			String userID = null;
-			if (session.getAttribute("userID") != null) {
-				userID = (String) session.getAttribute("userID");
-			}
-			int bbs_num = 0;
-			if(request.getParameter("bbs_num") != null){
-				bbs_num = Integer.parseInt(request.getParameter("bbs_num"));
-			}
-			if(bbs_num ==0){
-				PrintWriter script = response.getWriter();
-				script.println("<script>");
-				script.println("alert('유효하지 않은 글입니다..')");
-				script.println("location.href = 'manage_bbs.jsp'");
-				script.println("</script>");
-			}
-			ManageBbs managebbs = new ManageBbsDAO().getmanageBbs(bbs_num);
-			
-			int l_id = 0;
-			if(request.getParameter("l_id") != null){
-				l_id = Integer.parseInt(request.getParameter("l_id"));
-			}
-			Locate locate = new LocateDAO().getLocate(bbs_num);
-			
-			int t_id = 0;
-			if(request.getParameter("t_id") != null){
-				t_id = Integer.parseInt(request.getParameter("t_id"));
-			}
-			Temper temper = new TemperDAO().getTemper(bbs_num);
-			
-
-			
+		String userID = null;
+		if (session.getAttribute("userID") != null) {
+			userID = (String) session.getAttribute("userID");
+		}
+		int bbs_num = 0;
+		if(request.getParameter("bbs_num") != null){
+			bbs_num = Integer.parseInt(request.getParameter("bbs_num"));
+		}
+		if(bbs_num ==0){
+			PrintWriter script = response.getWriter();
+			script.println("<script>");
+			script.println("alert('유효하지 않은 글입니다..')");
+			script.println("location.href = 'manage_bbs.jsp'");
+			script.println("</script>");
+		}
+		ManageBbs managebbs = new ManageBbsDAO().getmanageBbs(bbs_num);
+		
+		int l_id = 0;
+		if(request.getParameter("l_id") != null){
+			l_id = Integer.parseInt(request.getParameter("l_id"));
+		}
+		Locate locate = new LocateDAO().getLocate(managebbs.getBbs_carrierID());
+		
+		int t_id = 0;
+		if(request.getParameter("t_id") != null){
+			t_id = Integer.parseInt(request.getParameter("t_id"));
+		}
+		Temper temper = new TemperDAO().getTemper(managebbs.getBbs_carrierID());
+	
+		int b_thing = 0;
+		if(request.getParameter("b_thing") != null){
+			b_thing = Integer.parseInt(request.getParameter("b_thing"));
+		}
+	
+		Bluetooth bluetooth = new BluetoothDAO().getBluetooth(managebbs.getBbs_carrierID());
+		
+		int c_id = 0;
+		if(request.getParameter("c_id") != null){
+			c_id = Integer.parseInt(request.getParameter("c_id"));
+		}
+		Carriers carriers = new CarriersDAO().getCarriers(managebbs.getBbs_carrierID());	
 	%>
 	<nav class="navbar navbar-default">
 	 <div class="navbar-header">
@@ -126,7 +136,7 @@
 					<th colspan="3" style="background-color: #eeeee; text-align: center;"><a href="LocateView.jsp?bbs_num=<%=managebbs.getBbs_num()%>" class="btn btn-primary pull-center" style="text-align: center">새로고침</a></th>
 					</tr>
 					<tr>
-						<th colspan="3" style="background-color: #eeeee; text-align: center;">실시간 위치 정보</th>
+						<th colspan="3" style="background-color: #eeeee; text-align: center;">실시간 위치 온도 정보</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -134,13 +144,21 @@
 						<td style="width: 20%;">순번</td>
 						<td colspan="2"><%= managebbs.getBbs_num() %></td>
 					</tr>
+					<tr>
+						<td style="width: 20%;">물품 이름</td>
+						<td colspan="2"><%= managebbs.getBbs_name() %></td>
+					</tr>
+					<tr>
+						<td style="width: 20%;">담당 운반자</td>
+						<td colspan="2"><%= carriers.getC_name() %></td>
+					</tr>
 				   	<tr>
 						<td style="width: 20%;">실시간 온도</td>
-						<td colspan="2"><%=  temper.getT_data() %></td>
+						<td colspan="2"><%=temper.getT_data() %></td>
 					</tr>
 					<tr>
 						<td style="width: 20%;">온도 업데이트 시간</td>
-						<td colspan="2"><%= temper.getT_time() %></td>
+						<td colspan="2"><%=temper.getT_time() %></td>
 					</tr>
 					<td>실시간 위치</td>
 					<td colspan="10">
@@ -169,10 +187,6 @@
 						<td style="width: 20%;">위치 업데이트 시간</td>
 						<td colspan="2"><%= locate.getL_time() %></td>
 					</tr>
-				    </td>
-					</tr>
-	
-
 				</tbody>
 			</table>
 			<a href="manage_bbs.jsp" class="btn btn-primary">목록</a>

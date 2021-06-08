@@ -21,15 +21,8 @@
 		if(session.getAttribute("m_ID") != null){
 			m_ID = (String) session.getAttribute("m_ID");
 		}
-		if(m_ID != null){
-			PrintWriter script = response.getWriter();
-			script.println("<script>");
-			script.println("alert('이미 로그인이 되어있습니다.')");
-			script.println("location.href = 'main.jsp'");
-			script.println("</script>");
-		}
-		if (manager.getm_ID() == null || manager.getm_Password() == null || manager.getm_Name() ==null
-		|| manager.getm_Phone() ==null ){
+		if (manager.getM_ID() == null || manager.getM_Password() == null || manager.getM_Name() ==null
+		|| manager.getM_Phone() ==null ){
 			PrintWriter script = response.getWriter();
 			script.println("<script>");
 			script.println("alert('입력이 되지 않은 사항이 있습니다.')");
@@ -46,7 +39,7 @@
 				script.println("</script>");
 			}
 			else {
-				session.setAttribute("m_ID", manager.getm_ID());
+				session.setAttribute("m_ID", manager.getM_ID());
 				PrintWriter script = response.getWriter();
 				script.println("<script>");
 				script.println("location.href = 'main.jsp'");

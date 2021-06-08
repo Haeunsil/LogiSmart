@@ -27,9 +27,9 @@
 			script.println("</script>");
 		}
 		ManagerDAO managerDAO = new ManagerDAO();
-		int result = managerDAO.login(manager.getm_ID(), manager.getm_Password());
+		int result = managerDAO.login(manager.getM_ID(), manager.getM_Password());
 		if (result ==1) {
-			session.setAttribute("m_ID", manager.getm_ID());
+			session.setAttribute("m_ID", manager.getM_ID());
 			PrintWriter script = response.getWriter();
 			script.println("<script>");
 			script.println("location.href= 'main.jsp'");

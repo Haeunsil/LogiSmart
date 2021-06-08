@@ -55,25 +55,26 @@
 	if(request.getParameter("l_id") != null){
 		l_id = Integer.parseInt(request.getParameter("l_id"));
 	}
-	Locate locate = new LocateDAO().getLocate(bbs_num);
+	Locate locate = new LocateDAO().getLocate(managebbs.getBbs_carrierID());
 	
 	int t_id = 0;
 	if(request.getParameter("t_id") != null){
 		t_id = Integer.parseInt(request.getParameter("t_id"));
 	}
-	Temper temper = new TemperDAO().getTemper(bbs_num);
+	Temper temper = new TemperDAO().getTemper(managebbs.getBbs_carrierID());
 
 	int b_thing = 0;
 	if(request.getParameter("b_thing") != null){
 		b_thing = Integer.parseInt(request.getParameter("b_thing"));
 	}
+
 	Bluetooth bluetooth = new BluetoothDAO().getBluetooth(bbs_num);
 	
 	int c_id = 0;
 	if(request.getParameter("c_id") != null){
 		c_id = Integer.parseInt(request.getParameter("c_id"));
 	}
-	Carriers carriers = new CarriersDAO().getCarriers(bbs_num);
+	Carriers carriers = new CarriersDAO().getCarriers(managebbs.getBbs_carrierID());
 	%>
 	<nav class="navbar navbar-default">
 	 <div class="navbar-header">
@@ -126,6 +127,7 @@
 		%>
 	 </div>
 	</nav>
+
 	<div class = "container">
 		<div class="row">
 		<form method="post" action="writeAction.jsp">
@@ -137,8 +139,8 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>글 번호</td>
-						<td colspan="2"><%= managebbs.getBbs_num() %></td>
+						<td>물품 순번</td>
+						<td colspan="5"><%= managebbs.getBbs_num() %></td>
 					</tr>
 					<tr>
 						<td style="width: 20%;">물품이름</td>
@@ -148,7 +150,6 @@
 						<td style="width: 20%;">담당 관리자</td>
 						<td colspan="2"><%= managebbs.getBbs_manager() %></td>
 					</tr>
-					
 					<tr>
 						<td style="width: 20%;">담당 운반자</td>
 						<td colspan="2"><%= carriers.getC_name() %></td>
@@ -161,7 +162,24 @@
 						<td style="width: 20%;">기기연결여부</td>
 						<td colspan="2"><%= bluetooth.getB_conn() %></td>
 					</tr>
+					<tr>
+						<td style="width: 20%;">출발지</td>
+						<td colspan="2"><%= managebbs.getBbs_start() %></td>
+					</tr>
+										<tr>
+						<td style="width: 20%;">도착지</td>
+						<td colspan="2"><%= managebbs.getBbs_arrival() %></td>
+					</tr>
+					<tr>
+						<td style="width: 20%;">온도 상한선</td>
+						<td colspan="2"><%= managebbs.getBbs_upper() %></td>
+					</tr>
+					<tr>
+						<td style="width: 20%;">온도 하한선</td>
+						<td colspan="2"><%= managebbs.getBbs_lower() %></td>
+					</tr>
 				
+
 				</tbody>
 			<a href="manage_bbs.jsp" class="btn btn-primary pull-center">목록</a>
 

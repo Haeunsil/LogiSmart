@@ -1,7 +1,18 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ page import="java.io.PrintWriter" %>
+<%@ page import="manager.Manager" %>
+<%@ page import="manager.ManagerDAO" %>
 <%@ page import="managebbs.ManageBbs" %>
 <%@ page import="managebbs.ManageBbsDAO" %>
+<%@ page import="bluetooth.Bluetooth" %>
+<%@ page import="bluetooth.BluetoothDAO" %>
+<%@ page import="carriers.Carriers" %>
+<%@ page import="carriers.CarriersDAO" %>
+<%@ page import="locate.Locate" %>
+<%@ page import="locate.LocateDAO" %>
+<%@ page import="temper.Temper" %>
+<%@ page import="temper.TemperDAO" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import ="java.net.URLEncoder" %>
 <%@ page import="java.sql.*" %>
@@ -10,8 +21,7 @@
                    java.sql.Statement,
                    java.sql.ResultSet,
                    java.sql.SQLException" %>
-<%@ page import="manager.Manager" %>
-<%@ page import="manager.ManagerDAO" %>
+                   
 <!DOCTYPE html>
 <html>
 <head>
@@ -26,24 +36,60 @@
 </head>
 <body>
 	<%
-		request.setCharacterEncoding("UTF-8");
-		String userID = null;
-		if (session.getAttribute("userID") != null) {
-			userID = (String) session.getAttribute("userID");
-		}
-		int pageNumber = 0;
-		if(request.getParameter("pageNumber") != null){
-			pageNumber = Integer.parseInt(request.getParameter("pageNumber"));
-		}
-		String searchType="전체";
-		if(request.getParameter("searchType") != null){
-			searchType = request.getParameter("searchType");
-		}
-		String search="";
-		if(request.getParameter("search") != null){
-			search = request.getParameter("search");
-		}
-		
+	String userID = null;
+	if (session.getAttribute("userID") != null) {
+		userID = (String) session.getAttribute("userID");
+	}
+	int pageNumber = 0;
+	if(request.getParameter("pageNumber") != null){
+		pageNumber = Integer.parseInt(request.getParameter("pageNumber"));
+	}
+	String searchType="전체";
+	if(request.getParameter("searchType") != null){
+		searchType = request.getParameter("searchType");
+	}
+	String search="";
+	if(request.getParameter("search") != null){
+		search = request.getParameter("search");
+	}
+	int bbs_carrierID = 0;
+	if(request.getParameter("bbs_carrierID") != null){
+		bbs_carrierID = Integer.parseInt(request.getParameter("bbs_carrierID"));
+	}
+	int bbs_num = 0;
+	if(request.getParameter("bbs_num") != null){
+		bbs_num = Integer.parseInt(request.getParameter("bbs_num"));
+	}
+	ManageBbs managebbs = new ManageBbsDAO().getmanageBbs(bbs_carrierID);
+
+	int l_id = 0;
+	if(request.getParameter("l_id") != null){
+		l_id = Integer.parseInt(request.getParameter("l_id"));
+	}
+	Locate locate = new LocateDAO().getLocate(bbs_num);
+
+	int b_thing = 0;
+	if(request.getParameter("b_thing") != null){
+		b_thing = Integer.parseInt(request.getParameter("b_thing"));
+	}
+	Bluetooth bluetooth = new BluetoothDAO().getBluetooth(bbs_num);
+	int t_id = 0;
+	if(request.getParameter("t_id") != null){
+		t_id = Integer.parseInt(request.getParameter("t_id"));
+	}
+	Temper temper = new TemperDAO().getTemper(bbs_num);
+	String m_ID = null;
+	if (session.getAttribute("m_ID") != null) {
+		m_ID = (String) session.getAttribute("m_ID");
+	}
+	Manager manager = new ManagerDAO().getmanager(m_ID);
+	
+	int c_id = 0;
+	if(request.getParameter("c_id") != null){
+		c_id = Integer.parseInt(request.getParameter("c_id"));
+	}
+	Carriers carriers = new CarriersDAO().getCarriers(c_id);
+	
 	%>
 	<nav class="navbar navbar-default">
 	 <div class="navbar-header">
@@ -64,8 +110,8 @@
 	 	<li><a href="manage_manager.jsp">관리자현황</a></li>
 	 	<li><a href="manage_carrier.jsp">운반자현황</a></li>
 	 	</ul>
-	 	<%
-	 		if(userID == null){
+<%
+	 		if(m_ID == null){
 	 	%>
 	 	<ul class="nav navbar-nav navbar-right">
 	 		<li class="dropdown">
@@ -74,7 +120,7 @@
 	 				aria-expanded="false">관리자 접속하기<span class="caret"></span></a>
 	 			<ul class="dropdown-menu">
 	 				<li><a href="login.jsp">로그인</a></li>
-	 				<li><a href="join.jsp">관리자추가</a></li>
+	 				<li><a href="join.jsp">관리자가입</a></li>
 	 			</ul>
 	 		</li>
 	 	</ul>
@@ -85,7 +131,7 @@
 	 		<li class="dropdown">
 	 			<a href="#" class="dropdown-toggle"
 	 				data-toggle="dropdown" role="button" aria-haspopup="true"
-	 				aria-expanded="false">회원관리<span class="caret"></span></a>
+	 				aria-expanded="false">"<%=manager.getM_ID() %>" 님 접 속 중<span class="caret"></span></a>
 	 			<ul class="dropdown-menu">
 	 				<li><a href="logoutAction.jsp">로그아웃</a></li>
 	 			</ul>
@@ -117,43 +163,40 @@
 				<thead>
 					<tr>
 						<th style="background-color: #eeeee; text-align: center;">번호</th>
-						<th style="background-color: #eeeee; text-align: center;">물품 이름</th>
-						<th style="background-color: #eeeee; text-align: center;">수락 요청일</th>
-						<th style="background-color: #eeeee; text-align: center;">운반자</th>
-						<th style="background-color: #eeeee; text-align: center;">수락 여부</th>
-						<th style="background-color: #eeeee; text-align: center;">선택</th>
+						<th style="background-color: #eeeee; text-align: center;">이름</th>
+						<th style="background-color: #eeeee; text-align: center;">생년월일</th>
+						<th style="background-color: #eeeee; text-align: center;">핸드폰 번호</th>
+						<th style="background-color: #eeeee; text-align: center;">운반거절</th>
+						<th style="background-color: #eeeee; text-align: center;">운반수락</th>
 					</tr>
 				</thead>
 				
 				<tbody>
-				<%
-					Class.forName("com.mysql.cj.jdbc.Driver");
-					String dbUrl="jdbc:mysql://localhost/logismart?characterEncoding=UTF-8&serverTimezone=UTC";
-					String dbUser="logismart";
-					String dbpass="Logi2017253012";
-					Connection con=DriverManager.getConnection(dbUrl, dbUser, dbpass);
-					String sql="select * from managebbs";
-					PreparedStatement pstmt=con.prepareStatement(sql);
-					ResultSet rs=pstmt.executeQuery();
-					%>	
-					
-					<%
-					while(rs.next()){
-					%>
-					<tr>
-							<td><%=rs.getInt("bbs_num")%> </td>
-							<td><%=rs.getString("bbs_name")%></td>
-							<td><%=rs.getString("bbs_manager")%> </td>
-							<td><%=rs.getString("bbs_start")%> </td>
-							<td><%=rs.getString("bbs_arrival")%> </td>
-							<td><input type='checkbox' name='check' value=rs.getInt("bbs_num")/></a></td>
-					</tr>
-					<%
-					}
-					%>
-
-			<a href="write.jsp" class="btn btn-primary pull-right">거절</a>
-			<a href="write.jsp" class="btn btn-primary pull-right">수락</a>
+			<%
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			String dbUrl="jdbc:mysql://logismart.cafe24.com/logismart?characterEncoding=UTF-8&serverTimezone=UTC";
+			String dbUser="logismart";
+			String dbpass="Logi2017253012";
+			Connection con=DriverManager.getConnection(dbUrl, dbUser, dbpass);
+			String sql="select * from carriers LEFT OUTER JOIN managebbs ON c_id = bbs_carrierID where bbs_carrierID is null";
+			PreparedStatement pstmt=con.prepareStatement(sql);
+			ResultSet rs=pstmt.executeQuery();
+			%>	
+			
+			<%
+			while(rs.next()){
+			%>	
+			<tr>
+			<td><%=rs.getInt("c_id")%> </td>
+			<td><%=rs.getString("c_name")%></td>
+			<td><%=rs.getString("c_birth")%> </td>
+			<td><%=rs.getString("c_phone")%> </td>
+			<td><a href="AcceptDeleteAction.jsp?c_id=<%=rs.getInt("c_id")%>"  class="btn btn-primary pull-center" style="text-align: center">거절</a></td>
+			<td><a href="CarryAccept.jsp?c_id=<%=rs.getInt("c_id")%>"  class="btn btn-primary pull-center" style="text-align: center">수락</a></td>
+			<%
+			}
+			%>
+		
 		</div>
 	</div>
 </body>

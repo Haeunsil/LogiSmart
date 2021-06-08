@@ -13,7 +13,7 @@ public class ManageBbsDAO {
 		
 		public ManageBbsDAO() {
 			try {
-				String dbURL = "jdbc:mysql://localhost/logismart?characterEncoding=UTF-8&serverTimezone=UTC";
+				String dbURL = "jdbc:mysql://logismart.cafe24.com/logismart?characterEncoding=UTF-8&serverTimezone=UTC";
 				String dbID = "logismart";
 				String dbPassword = "Logi2017253012";
 				Class.forName("com.mysql.cj.jdbc.Driver");
@@ -91,7 +91,7 @@ public class ManageBbsDAO {
 
 
  public ManageBbs getmanageBbs(int bbs_num) {
-	String SQL = "SELECT * FROM managebbs WHERE bbs_num = ?";
+	String SQL = "SELECT * FROM managebbs LEFT OUTER JOIN carriers ON bbs_num = c_id WHERE bbs_num = ?";
 	try {
 		PreparedStatement pstmt = conn.prepareStatement(SQL);
 		pstmt.setInt(1, bbs_num);
@@ -113,24 +113,20 @@ public class ManageBbsDAO {
 		}
 	return null; 
  	}
- /*
- 	public int update(String proTitle, String userID, String proContent, String proWho, String proWhere) {
- 		String SQL = "UPDATE PROBBS SET proTitle =?, proContent = ? WHERE proID = ?";
+
+ 	public int update(int bbs_carrierID) {
+ 		String SQL = "UPDATE managebbs SET bbs_carrierID = bbs_carrierID";
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
-			pstmt.setString(1, proTitle);
-			pstmt.setString(2, userID);
-			pstmt.setString(3, proContent);
-			pstmt.setString(4, proWho);
-			pstmt.setString(5, proWhere);
-			pstmt.setInt(6, 1);
+			pstmt.setInt(4, bbs_carrierID);
+
 			return pstmt.executeUpdate();
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
 		return -1; //데이터베이스 오류 		
  	}
- 	
+ /*
  	public int delete(int proID) {
  		String SQL = "UPDATE PROBBS SET proAvailable = 0 WHERE proID =?";
 		try {

@@ -73,6 +73,11 @@
 			t_id = Integer.parseInt(request.getParameter("t_id"));
 		}
 		Temper temper = new TemperDAO().getTemper(bbs_num);
+		String m_ID = null;
+		if (session.getAttribute("m_ID") != null) {
+			m_ID = (String) session.getAttribute("m_ID");
+		}
+		Manager manager = new ManagerDAO().getmanager(m_ID);
 		
 	%>
 	<nav class="navbar navbar-default">
@@ -94,8 +99,8 @@
 	 	<li><a href="manage_manager.jsp">관리자현황</a></li>
 	 	<li><a href="manage_carrier.jsp">운반자현황</a></li>
 	 	</ul>
-	 	<%
-	 		if(userID == null){
+	 		<%
+	 		if(m_ID == null){
 	 	%>
 	 	<ul class="nav navbar-nav navbar-right">
 	 		<li class="dropdown">
@@ -115,7 +120,7 @@
 	 		<li class="dropdown">
 	 			<a href="#" class="dropdown-toggle"
 	 				data-toggle="dropdown" role="button" aria-haspopup="true"
-	 				aria-expanded="false">회원관리<span class="caret"></span></a>
+	 				aria-expanded="false">"<%=manager.getM_ID() %>" 님 접 속 중<span class="caret"></span></a>
 	 			<ul class="dropdown-menu">
 	 				<li><a href="logoutAction.jsp">로그아웃</a></li>
 	 			</ul>
@@ -146,7 +151,7 @@
 			<table class="table table-striped" style ="text-align: center; border: 1px solid #dddddd">
 				<thead>
 					<tr>
-						<th style="background-color: #eeeee; text-align: center;">순번</th>
+						<th style="background-color: #eeeee; text-align: center;">물품번호</th>
 						<th style="background-color: #eeeee; text-align: center;">물품이름</th>
 						<th style="background-color: #eeeee; text-align: center;">출발지</th>
 						<th style="background-color: #eeeee; text-align: center;">도착지</th>

@@ -13,7 +13,7 @@ public class TemperDAO {
 		
 		public TemperDAO() {
 			try {
-				String dbURL = "jdbc:mysql://localhost/logismart?characterEncoding=UTF-8&serverTimezone=UTC";
+				String dbURL = "jdbc:mysql://logismart.cafe24.com/logismart?characterEncoding=UTF-8&serverTimezone=UTC";
 				String dbID = "logismart";
 				String dbPassword = "Logi2017253012";
 				Class.forName("com.mysql.cj.jdbc.Driver");
@@ -87,7 +87,7 @@ public class TemperDAO {
 
 
  public Temper getTemper(int t_id) {
-	String SQL = "SELECT * FROM temper WHERE t_id = ?";
+	String SQL = "SELECT * FROM temper WHERE t_id = ? order by t_time desc";
 	try {
 		PreparedStatement pstmt = conn.prepareStatement(SQL);
 		pstmt.setInt(1, t_id);
