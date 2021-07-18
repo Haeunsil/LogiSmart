@@ -21,7 +21,8 @@
                    java.sql.Statement,
                    java.sql.ResultSet,
                    java.sql.SQLException" %>
-                   
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -36,48 +37,26 @@
 </head>
 <body>
 	<%
-	String userID = null;
-	if (session.getAttribute("userID") != null) {
-		userID = (String) session.getAttribute("userID");
-	}
-	int bbs_carrierID = 0;
-	if(request.getParameter("bbs_carrierID") != null){
-		bbs_carrierID = Integer.parseInt(request.getParameter("bbs_carrierID"));
-	}
-	int bbs_num = 0;
-	if(request.getParameter("bbs_num") != null){
-		bbs_num = Integer.parseInt(request.getParameter("bbs_num"));
-	}
-	ManageBbs managebbs = new ManageBbsDAO().getmanageBbs(bbs_carrierID);
-
-	int l_id = 0;
-	if(request.getParameter("l_id") != null){
-		l_id = Integer.parseInt(request.getParameter("l_id"));
-	}
-	Locate locate = new LocateDAO().getLocate(bbs_num);
-
-	int b_thing = 0;
-	if(request.getParameter("b_thing") != null){
-		b_thing = Integer.parseInt(request.getParameter("b_thing"));
-	}
-	Bluetooth bluetooth = new BluetoothDAO().getBluetooth(bbs_num);
-	int t_id = 0;
-	if(request.getParameter("t_id") != null){
-		t_id = Integer.parseInt(request.getParameter("t_id"));
-	}
-	Temper temper = new TemperDAO().getTemper(bbs_num);
-	String m_ID = null;
-	if (session.getAttribute("m_ID") != null) {
-		m_ID = (String) session.getAttribute("m_ID");
-	}
-	Manager manager = new ManagerDAO().getmanager(m_ID);
-	
-	int c_id = 0;
-	if(request.getParameter("c_id") != null){
-		c_id = Integer.parseInt(request.getParameter("c_id"));
-	}
-	Carriers carriers = new CarriersDAO().getCarriers(c_id);
-	
+		int b_num = 0;
+		if(request.getParameter("b_num") != null){
+			b_num = Integer.parseInt(request.getParameter("b_num"));
+		}
+		Bluetooth bluetooth = new BluetoothDAO().getBluetooth(b_num);
+		int c_id = 0;
+		if(request.getParameter("c_id") != null){
+			c_id = Integer.parseInt(request.getParameter("c_id"));
+		}
+		Carriers carriers = new CarriersDAO().getCarriers(c_id);		
+		String userID = null;
+		if (session.getAttribute("userID") != null) {
+			userID = (String) session.getAttribute("userID");
+		}
+		String m_ID = null;
+		if (session.getAttribute("m_ID") != null) {
+			m_ID = (String) session.getAttribute("m_ID");
+		}
+		Manager manager = new ManagerDAO().getmanager(m_ID);
+		
 	%>
 	<nav class="navbar navbar-default">
 	 <div class="navbar-header">
@@ -93,13 +72,13 @@
 	 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 	 	<ul class="nav navbar-nav">
 	 	<li><a href="main.jsp">메인</a></li>
-	 	<li><a href="manage_bluetooth.jsp">기기매칭</a></li>
-	 	<li class="active"><a href="manage_Accept.jsp">운반수락</a></li>
+	 	<li class="active"><a href="manage_bluetooth.jsp">기기매칭</a></li>
+	 	<li><a href="manage_Accept.jsp">운반수락</a></li>
 	 	<li><a href="manage_bbs.jsp">운반현황</a></li>
 	 	<li><a href="manage_manager.jsp">관리자현황</a></li>
 	 	<li><a href="manage_carrier.jsp">운반자현황</a></li>
 	 	</ul>
-<%
+	 		<%
 	 		if(m_ID == null){
 	 	%>
 	 	<ul class="nav navbar-nav navbar-right">
@@ -131,54 +110,72 @@
 		%>
 	 </div>
 	</nav>
+	
+	
 		<div class = "container">
 		<div class="row">
-		<form method="post" action="AcceptUpdateAction.jsp">
+		<form method="post" action="Bt_UpdateAction.jsp?b_num=<%=b_num%>">
+			<table class="table table-striped" style ="text-align: center; border: 1px solid #dddddd">
+					<tr>
+						<th colspan="2" style="background-color: #eeeee; text-align: center;">' <%=b_num%>번 '  블루투스  기기 -> 운반자 매칭</th>
+					</tr>
+					<tr>
+						<td><th style="background-color: #eeeee; text-align: center;">
+						<input type="number" class="form-control" placeholder="매칭할  운반자의 번호를 입력해주세요." name="b_carrier" maxlength="50" "style ="text-align: center;"  ></th>
+						</td>
+					</tr>
+				<th colspan="3" style="background-color: #eeeee; text-align: center;"><input type="submit" class="btn btn-primary pull-center" style="text-align: center" value="등록하기"></th>
+			</table>		
+		</form>
+		</div>
+		</div>
+		
+		<div class = "container">
+		<div class="row">
 			<table class="table table-striped" style ="text-align: center; border: 1px solid #dddddd">
 				<thead>
 					<tr style="background-color: #eeeee; text-align: center;">
-						매칭 가능한 운반 물품 리스트
+						매칭 가능한 운반자 리스트
 					</tr>
+				</thead>
+				<tbody>
 					<tr>
-						<th style="background-color: #eeeee; text-align: center;">물품 번호</th>
-						<th style="background-color: #eeeee; text-align: center;">물품 이름</th>
-						<th style="background-color: #eeeee; text-align: center;">담당 관리자</th>
-						<th style="background-color: #eeeee; text-align: center;">출발지</th>
-						<th style="background-color: #eeeee; text-align: center;">도착지</th>
-						<th style="background-color: #eeeee; text-align: center;">운반거절</th>
-						<th style="background-color: #eeeee; text-align: center;">운반수락</th>
+						<td style="background-color: #eeeee; text-align: center;">번호</th>
+						<td style="background-color: #eeeee; text-align: center;">이름</th>
+						<td style="background-color: #eeeee; text-align: center;">생년월일</th>
+						<td style="background-color: #eeeee; text-align: center;">전화번호</th>
 					</tr>
-			</thead>
-			<tbody>
+
+
 			<%
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			String dbUrl="jdbc:mysql://logismart.cafe24.com/logismart?characterEncoding=UTF-8&serverTimezone=UTC";
-
 			String dbUser="logismart";
 			String dbpass="Logi2017253012";
 			Connection con=DriverManager.getConnection(dbUrl, dbUser, dbpass);
-			String sql="select * from managebbs where bbs_carrierID is null";
+			String sql="select * from carriers LEFT OUTER JOIN managebbs ON c_id = bbs_carrierID where bbs_carrierID is null";
 			PreparedStatement pstmt=con.prepareStatement(sql);
 			ResultSet rs=pstmt.executeQuery();
+			
 			%>	
 			
 			<%
 			while(rs.next()){
-			%>
-			<tr>	
-			<td><%=rs.getInt("bbs_num")%> </td>
-			<td><%=rs.getString("bbs_name")%></td>
-			<td><%=rs.getString("bbs_manager")%> </td>
-			<td><%=rs.getString("bbs_start")%> </td>
-			<td><%=rs.getString("bbs_arrival")%> </td>
-			<td><a href="AcceptDeleteAction.jsp?bbs_num=<%=rs.getInt("bbs_num")%>"  class="btn btn-primary pull-center" style="text-align: center">거절</a></td>
-			<td><a href="CarryAccept.jsp?bbs_num=<%=rs.getInt("bbs_num")%>"  class="btn btn-primary pull-center" style="text-align: center">수락</a></td>
+			%>	
+			<tr>
+			<td><%=rs.getInt("c_id")%> </td>
+			<td><%=rs.getString("c_name")%> </td>
+			<td><%=rs.getString("c_birth")%> </td>
+			<td><%=rs.getString("c_phone")%> </td>
 			</tr>
 			<%
+			
 			}
 			%>
 			</tbody>
-		</div>
-	</div>
+			</table>
+			</div>
+			</div>
+</tbody>
 </body>
 </html>

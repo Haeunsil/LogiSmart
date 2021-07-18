@@ -61,7 +61,7 @@ public class TemperDAO {
 			while (rs.next()) {
 				Temper temper = new Temper();
 				temper.setT_id(rs.getInt(1));
-				temper.setT_data(rs.getInt(2));
+				temper.setT_data(rs.getFloat(2));
 				temper.setT_time(rs.getString(3));
 				list.add(temper);				
 			}			
@@ -95,7 +95,7 @@ public class TemperDAO {
 		if (rs.next()) {
 			Temper temper = new Temper();
 			temper.setT_id(rs.getInt(1));
-			temper.setT_data(rs.getInt(2));
+			temper.setT_data(rs.getFloat(2));
 			temper.setT_time(rs.getString(3));
 			return temper;
 		}			

@@ -42,13 +42,6 @@
 		if(request.getParameter("bbs_num") != null){
 			bbs_num = Integer.parseInt(request.getParameter("bbs_num"));
 		}
-		if(bbs_num ==0){
-			PrintWriter script = response.getWriter();
-			script.println("<script>");
-			script.println("alert('유효하지 않은 글입니다..')");
-			script.println("location.href = 'manage_bbs.jsp'");
-			script.println("</script>");
-		}
 		ManageBbs managebbs = new ManageBbsDAO().getmanageBbs(bbs_num);
 		
 		int l_id = 0;
@@ -63,9 +56,9 @@
 		}
 		Temper temper = new TemperDAO().getTemper(managebbs.getBbs_carrierID());
 	
-		int b_thing = 0;
-		if(request.getParameter("b_thing") != null){
-			b_thing = Integer.parseInt(request.getParameter("b_thing"));
+		int b_carrier = 0;
+		if(request.getParameter("b_carrier") != null){
+			b_carrier = Integer.parseInt(request.getParameter("b_carrier"));
 		}
 	
 		Bluetooth bluetooth = new BluetoothDAO().getBluetooth(managebbs.getBbs_carrierID());
@@ -75,6 +68,7 @@
 			c_id = Integer.parseInt(request.getParameter("c_id"));
 		}
 		Carriers carriers = new CarriersDAO().getCarriers(managebbs.getBbs_carrierID());	
+
 	%>
 	<nav class="navbar navbar-default">
 	 <div class="navbar-header">

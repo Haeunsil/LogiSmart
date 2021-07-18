@@ -114,29 +114,27 @@ public class ManageBbsDAO {
 	return null; 
  	}
 
- 	public int update(int bbs_carrierID) {
- 		String SQL = "UPDATE managebbs SET bbs_carrierID = bbs_carrierID";
+ 	public int update(int bbs_num, int bbs_carrierID) {
+ 		String SQL = "UPDATE managebbs SET bbs_carrierID =?  WHERE bbs_num = ?";
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
-			pstmt.setInt(4, bbs_carrierID);
-
+			pstmt.setInt(1, bbs_carrierID);
+			pstmt.setInt(2, bbs_num);
 			return pstmt.executeUpdate();
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
 		return -1; //데이터베이스 오류 		
  	}
- /*
- 	public int delete(int proID) {
- 		String SQL = "UPDATE PROBBS SET proAvailable = 0 WHERE proID =?";
+	public int delete(int bbs_num) {
+ 		String SQL = "delete from managebbs where bbs_num =?";
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
-			pstmt.setInt(1, proID);
+			pstmt.setInt(1, bbs_num);
 			return pstmt.executeUpdate();
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
 		return -1; 	//데이터베이스 오류 		
  	}
- 	*/
 }

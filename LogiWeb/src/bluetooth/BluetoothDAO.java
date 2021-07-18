@@ -24,7 +24,7 @@ public class BluetoothDAO {
 		}
 		
 	public int getNext() {
-		String SQL = "SELECT b_thing FROM bluetooth ORDER BY b_thing DESC";
+		String SQL = "SELECT b_num FROM bluetooth ORDER BY b_num DESC";
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
 			rs = pstmt.executeQuery();
@@ -60,10 +60,11 @@ public class BluetoothDAO {
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				Bluetooth bluetooth = new Bluetooth();
-				bluetooth.setB_name(rs.getString(1));
-				bluetooth.setB_carrier(rs.getInt(2));
-				bluetooth.setB_thing(rs.getInt(3));
-				bluetooth.setB_conn(rs.getInt(4));
+				bluetooth.setB_num(rs.getInt(1));
+				bluetooth.setB_name(rs.getString(2));
+				bluetooth.setB_carrier(rs.getInt(3));
+				bluetooth.setB_thing(rs.getInt(4));
+				bluetooth.setB_conn(rs.getInt(5));
 				list.add(bluetooth);				
 			}			
 		}catch(Exception e) {
@@ -73,7 +74,7 @@ public class BluetoothDAO {
 		return list; //데이터베이스오류
 	}
 	public boolean nextPage(int pageNumber) {
-		String SQL = "SELECT * FROM bluetooth WHERE b_thing < ?";
+		String SQL = "SELECT * FROM bluetooth WHERE b_num < ?";
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
 			pstmt.setInt(1, getNext() - (pageNumber - 1)*10);
@@ -88,24 +89,72 @@ public class BluetoothDAO {
 	}
 
 
- public Bluetooth getBluetooth(int b_thing) {
-	String SQL = "SELECT * FROM bluetooth WHERE b_thing = ?";
-	try {
-		PreparedStatement pstmt = conn.prepareStatement(SQL);
-		pstmt.setInt(1, b_thing);
-		rs = pstmt.executeQuery();
-		if (rs.next()) {
-			Bluetooth bluetooth = new Bluetooth();
-			bluetooth.setB_name(rs.getString(1));
-			bluetooth.setB_carrier(rs.getInt(2));
-			bluetooth.setB_thing(rs.getInt(3));
-			bluetooth.setB_conn(rs.getInt(4));
-			return bluetooth;
-		}			
-	}catch(Exception e) {
-		e.printStackTrace();
+	 public Bluetooth getBluetooth(int b_carrier) {
+			String SQL = "SELECT * FROM bluetooth WHERE b_carrier = ?";
+			try {
+				PreparedStatement pstmt = conn.prepareStatement(SQL);
+				pstmt.setInt(1, b_carrier);
+				rs = pstmt.executeQuery();
+				if (rs.next()) {
+					Bluetooth bluetooth = new Bluetooth();
+					bluetooth.setB_num(rs.getInt(1));
+					bluetooth.setB_name(rs.getString(2));
+					bluetooth.setB_carrier(rs.getInt(3));
+					bluetooth.setB_thing(rs.getInt(4));
+					bluetooth.setB_conn(rs.getInt(5));
+					return bluetooth;
+				}			
+			}catch(Exception e) {
+				e.printStackTrace();
+				}
+			return null; 
+		 	}
+ 
+	public int update(int b_num, int b_carrier) {
+ 		String SQL = "UPDATE bluetooth SET b_carrier =?  WHERE b_num = ?";
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			pstmt.setInt(1, b_carrier);
+			pstmt.setInt(2, b_num);
+			return pstmt.executeUpdate();
+		}catch(Exception e) {
+			e.printStackTrace();
 		}
-	return null; 
+		return -1; //데이터베이스 오류 		
  	}
-
+	public int update2(int b_carrier) {
+ 		String SQL = "UPDATE bluetooth INNER JOIN managebbs ON bluetooth.b_carrier = managebbs.bbs_carrierID SET bluetooth.b_thing = managebbs.bbs_num WHERE b_carrier=?";
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			pstmt.setInt(1, b_carrier);
+			return pstmt.executeUpdate();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return -1; //데이터베이스 오류 		
+ 	}
+	public int update_thing (int b_num, int b_thing) {
+ 		String SQL = "UPDATE bluetooth SET b_thing =?  WHERE b_num = ?";
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			pstmt.setInt(1, b_thing);
+			pstmt.setInt(2, b_num);
+			return pstmt.executeUpdate();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return -1; //데이터베이스 오류 		
+ 	}
+	
+	public int delete(int b_num) {
+ 		String SQL = "delete from bluetooth where b_num =?";
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			pstmt.setInt(1, b_num);
+			return pstmt.executeUpdate();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return -1; 	//데이터베이스 오류 		
+ 	}
 }

@@ -41,6 +41,7 @@
 		if(request.getParameter("bbs_num") != null){
 			bbs_num = Integer.parseInt(request.getParameter("bbs_num"));
 		}
+		ManageBbs managebbs = new ManageBbsDAO().getmanageBbs(bbs_num);
 		int c_id = 0;
 		if(request.getParameter("c_id") != null){
 			c_id = Integer.parseInt(request.getParameter("c_id"));
@@ -50,21 +51,6 @@
 		if (session.getAttribute("userID") != null) {
 			userID = (String) session.getAttribute("userID");
 		}
-		int pageNumber = 0;
-		if(request.getParameter("pageNumber") != null){
-			pageNumber = Integer.parseInt(request.getParameter("pageNumber"));
-		}
-		String searchType="전체";
-		if(request.getParameter("searchType") != null){
-			searchType = request.getParameter("searchType");
-		}
-		String search="";
-		if(request.getParameter("search") != null){
-			search = request.getParameter("search");
-		}
-
-		ManageBbs managebbs = new ManageBbsDAO().getmanageBbs(bbs_num);
-	
 		String m_ID = null;
 		if (session.getAttribute("m_ID") != null) {
 			m_ID = (String) session.getAttribute("m_ID");
@@ -86,6 +72,7 @@
 	 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 	 	<ul class="nav navbar-nav">
 	 	<li><a href="main.jsp">메인</a></li>
+	 	<li><a href="manage_bluetooth.jsp">기기매칭</a></li>
 	 	<li class="active"><a href="manage_Accept.jsp">운반수락</a></li>
 	 	<li><a href="manage_bbs.jsp">운반현황</a></li>
 	 	<li><a href="manage_manager.jsp">관리자현황</a></li>
@@ -124,61 +111,71 @@
 	 </div>
 	</nav>
 	
-	<div class = "container">
-		
-		<form method="get" action="manage_bbs.jsp" class="form-inline" style="margin-bottom: 10px">
-				<select name="searchType" class="form-control">
-					<option value="전체">전체</option>
-					<option value="번호" <%if(searchType.equals("이름")) out.println("selected");%>>이름</option>
-					<option value="상태" <%if(searchType.equals("상태")) out.println("selected");%>>상태</option>
-					<option value="정보" <%if(searchType.equals("정보")) out.println("selected");%>>정보</option>
-				</select>
-				<input type="text" name="search" class="form-control" <% if(!search.equals("")) out.println("value="+ search); else out.println("placeholder=\"내용을 입력하세요\""); %>>
-				<button type="submit" class="form-control btn btn-primary">검색</button>
-				<a href="manage_bbs.jsp" class="btn btn-primary pull-right">새로고침</a>
+	
+		<div class = "container">
+		<div class="row">
+		<form method="post" action="AcceptUpdateAction.jsp?bbs_num=<%=bbs_num%>">
+			<table class="table table-striped" style ="text-align: center; border: 1px solid #dddddd">
+					<tr>
+						<th colspan="2" style="background-color: #eeeee; text-align: center;">' <%=bbs_num%>번 : <%=managebbs.getBbs_name()%> ' 물품 -> 운반자 매칭</th>
+					</tr>
+					<tr>
+						<td><th style="background-color: #eeeee; text-align: center;">
+						<input type="number" class="form-control" placeholder="매칭할 운반자의 번호를 입력해주세요." name="bbs_carrierID" maxlength="50" "style ="text-align: center;"  ></th>
+						</td>
+					</tr>
+				<th colspan="3" style="background-color: #eeeee; text-align: center;"><input type="submit" class="btn btn-primary pull-center" style="text-align: center" value="등록하기"></th>
+			</table>		
 		</form>
-	
-	
+		</div>
+		</div>
+		
+		<div class = "container">
 		<div class="row">
 			<table class="table table-striped" style ="text-align: center; border: 1px solid #dddddd">
 				<thead>
-					<tr>
-						<th style="background-color: #eeeee; text-align: center;">물품번호</th>
-						<th style="background-color: #eeeee; text-align: center;">물품이름</th>
-						<th style="background-color: #eeeee; text-align: center;">담당관리자</th>
-						<th style="background-color: #eeeee; text-align: center;">출발지</th>
-						<th style="background-color: #eeeee; text-align: center;">도착지</th>
-						<th style="background-color: #eeeee; text-align: center;">운반매칭</th>
+					<tr style="background-color: #eeeee; text-align: center;">
+						매칭 가능한 운반자 리스트
 					</tr>
 				</thead>
 				<tbody>
+					<tr>
+						<td style="background-color: #eeeee; text-align: center;">번호</th>
+						<td style="background-color: #eeeee; text-align: center;">이름</th>
+						<td style="background-color: #eeeee; text-align: center;">생일</th>
+						<td style="background-color: #eeeee; text-align: center;">번호</th>
+					</tr>
+
+
 			<%
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			String dbUrl="jdbc:mysql://logismart.cafe24.com/logismart?characterEncoding=UTF-8&serverTimezone=UTC";
 			String dbUser="logismart";
 			String dbpass="Logi2017253012";
 			Connection con=DriverManager.getConnection(dbUrl, dbUser, dbpass);
-			String sql="select * from managebbs where bbs_carrierID is null";
+			String sql="select * from carriers LEFT OUTER JOIN managebbs ON c_id = bbs_carrierID where bbs_carrierID is null";
 			PreparedStatement pstmt=con.prepareStatement(sql);
 			ResultSet rs=pstmt.executeQuery();
+			
 			%>	
 			
 			<%
 			while(rs.next()){
 			%>	
 			<tr>
-			<td><%=rs.getInt("bbs_num")%> </td>
-			<td><%=rs.getString("bbs_name")%></td>
-			<td><%=rs.getString("bbs_manager")%> </td>
-			<td><%=rs.getString("bbs_start")%> </td>
-			<td><%=rs.getString("bbs_arrival")%> </td>
-			<td><a href="AcceptUpdateAction.jsp?c_id=<%=carriers.getC_id()%>" class="btn btn-primary pull-center" style="text-align: center">수락</a></td>
+			<td><%=rs.getInt("c_id")%> </td>
+			<td><%=rs.getString("c_name")%></td>
+			<td><%=rs.getString("c_birth")%> </td>
+			<td><%=rs.getString("c_phone")%> </td>
+			</tr>
 			<%
+			
 			}
 			%>
-
-				</tbody>
+			</tbody>
 			</table>
-
+			</div>
+			</div>
+</tbody>
 </body>
 </html>

@@ -2,7 +2,7 @@ package temper;
 
 public class Temper {
 	private int t_id;
-	private int t_data;
+	private float t_data;
 	private String t_time;
 	
 	public int getT_id() {
@@ -11,10 +11,10 @@ public class Temper {
 	public void setT_id(int t_id) {
 		this.t_id = t_id;
 	}
-	public int getT_data() {
+	public float getT_data() {
 		return t_data;
 	}
-	public void setT_data(int t_data) {
+	public void setT_data(float t_data) {
 		this.t_data = t_data;
 	}
 	public String getT_time() {

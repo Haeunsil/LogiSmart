@@ -1,11 +1,19 @@
 package bluetooth;
 
 public class Bluetooth {
+	private int b_num;
 	private String b_name;
 	private int b_carrier;
 	private int b_thing;
 	private int b_conn;
 	
+	
+	public int getB_num() {
+		return b_num;
+	}
+	public void setB_num(int b_num) {
+		this.b_num = b_num;
+	}
 	public String getB_name() {
 		return b_name;
 	}

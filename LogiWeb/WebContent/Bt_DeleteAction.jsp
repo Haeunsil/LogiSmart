@@ -4,19 +4,18 @@
 <%@ page import="carriers.CarriersDAO"%>
 <%@ page import="managebbs.ManageBbs"%>
 <%@ page import="managebbs.ManageBbsDAO"%>
+<%@ page import="bluetooth.Bluetooth"%>
+<%@ page import="bluetooth.BluetoothDAO"%>
 <%@ page import="java.io.PrintWriter"%>
 <%
 	request.setCharacterEncoding("UTF-8");
 %>
-<jsp:useBean id="manageBbs" class="managebbs.ManageBbs" scope="page" />
-<jsp:setProperty name="manageBbs" property="bbs_num" />
-<jsp:setProperty name="manageBbs" property="bbs_name" />
-<jsp:setProperty name="manageBbs" property="bbs_manager" />
-<jsp:setProperty name="manageBbs" property="bbs_carrierID" />
-<jsp:setProperty name="manageBbs" property="bbs_start" />
-<jsp:setProperty name="manageBbs" property="bbs_arrival" />
-<jsp:setProperty name="manageBbs" property="bbs_upper" />
-<jsp:setProperty name="manageBbs" property="bbs_lower" />
+<jsp:useBean id="bluetooth" class="bluetooth.Bluetooth" scope="page" />
+<jsp:setProperty name="bluetooth" property="b_num" />
+<jsp:setProperty name="bluetooth" property="b_name" />
+<jsp:setProperty name="bluetooth" property="b_carrier" />
+<jsp:setProperty name="bluetooth" property="b_thing" />
+<jsp:setProperty name="bluetooth" property="b_conn" />
 
 <!DOCTYPE html>
 <html>
@@ -25,7 +24,7 @@
 <title>Logi Mananger Web</title>
 </head>
 <body>
-	<%
+		<%
 		String m_ID = null;
 		if (session.getAttribute("m_ID") != null) {
 			m_ID = (String) session.getAttribute("m_ID");
@@ -37,12 +36,12 @@
 			script.println("location.href = 'login.jsp'");
 			script.println("</script>");
 			} else {
-			int bbs_num = 0;
-			if(request.getParameter("bbs_num") != null){
-				bbs_num = Integer.parseInt(request.getParameter("bbs_num"));
+			int b_num = 0;
+			if(request.getParameter("b_num") != null){
+				b_num = Integer.parseInt(request.getParameter("b_num"));
 			}
-			ManageBbsDAO managebbsDAO = new ManageBbsDAO();
-				int result = managebbsDAO.delete(bbs_num);
+			BluetoothDAO bluetoothDAO = new BluetoothDAO();
+				int result = bluetoothDAO.delete(b_num);
 				if (result == -1) {
 					PrintWriter script = response.getWriter();
 					script.println("<script>");
@@ -52,7 +51,7 @@
 				} else {
 					PrintWriter script = response.getWriter();
 					script.println("<script>");
-					script.println("location.href = 'manage_Accept.jsp'");
+					script.println("location.href = 'manage_bluetooth.jsp'");
 					script.println("</script>");
 				}
 		}

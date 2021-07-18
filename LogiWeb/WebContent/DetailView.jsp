@@ -62,13 +62,11 @@
 		t_id = Integer.parseInt(request.getParameter("t_id"));
 	}
 	Temper temper = new TemperDAO().getTemper(managebbs.getBbs_carrierID());
-
 	int b_thing = 0;
 	if(request.getParameter("b_thing") != null){
 		b_thing = Integer.parseInt(request.getParameter("b_thing"));
 	}
-
-	Bluetooth bluetooth = new BluetoothDAO().getBluetooth(bbs_num);
+	Bluetooth bluetooth = new BluetoothDAO().getBluetooth(managebbs.getBbs_carrierID());
 	
 	int c_id = 0;
 	if(request.getParameter("c_id") != null){

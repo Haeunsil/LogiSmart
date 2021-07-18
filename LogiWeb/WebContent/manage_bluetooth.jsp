@@ -93,8 +93,8 @@
 	 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 	 	<ul class="nav navbar-nav">
 	 	<li><a href="main.jsp">메인</a></li>
-	 	<li><a href="manage_bluetooth.jsp">기기매칭</a></li>
-	 	<li class="active"><a href="manage_Accept.jsp">운반수락</a></li>
+	 	<li class="active"><a href="manage_bluetooth.jsp">기기매칭</a></li>
+	 	<li><a href="manage_Accept.jsp">운반수락</a></li>
 	 	<li><a href="manage_bbs.jsp">운반현황</a></li>
 	 	<li><a href="manage_manager.jsp">관리자현황</a></li>
 	 	<li><a href="manage_carrier.jsp">운반자현황</a></li>
@@ -137,16 +137,13 @@
 			<table class="table table-striped" style ="text-align: center; border: 1px solid #dddddd">
 				<thead>
 					<tr style="background-color: #eeeee; text-align: center;">
-						매칭 가능한 운반 물품 리스트
+						매칭 가능한 블루투스 기기 리스트
 					</tr>
 					<tr>
-						<th style="background-color: #eeeee; text-align: center;">물품 번호</th>
-						<th style="background-color: #eeeee; text-align: center;">물품 이름</th>
-						<th style="background-color: #eeeee; text-align: center;">담당 관리자</th>
-						<th style="background-color: #eeeee; text-align: center;">출발지</th>
-						<th style="background-color: #eeeee; text-align: center;">도착지</th>
-						<th style="background-color: #eeeee; text-align: center;">운반거절</th>
-						<th style="background-color: #eeeee; text-align: center;">운반수락</th>
+						<th style="background-color: #eeeee; text-align: center;">기기 번호</th>
+						<th style="background-color: #eeeee; text-align: center;">기기 이름</th>
+						<th style="background-color: #eeeee; text-align: center;">거절</th>
+						<th style="background-color: #eeeee; text-align: center;">수락</th>
 					</tr>
 			</thead>
 			<tbody>
@@ -157,7 +154,7 @@
 			String dbUser="logismart";
 			String dbpass="Logi2017253012";
 			Connection con=DriverManager.getConnection(dbUrl, dbUser, dbpass);
-			String sql="select * from managebbs where bbs_carrierID is null";
+			String sql="select * from bluetooth where b_carrier is null";
 			PreparedStatement pstmt=con.prepareStatement(sql);
 			ResultSet rs=pstmt.executeQuery();
 			%>	
@@ -166,13 +163,10 @@
 			while(rs.next()){
 			%>
 			<tr>	
-			<td><%=rs.getInt("bbs_num")%> </td>
-			<td><%=rs.getString("bbs_name")%></td>
-			<td><%=rs.getString("bbs_manager")%> </td>
-			<td><%=rs.getString("bbs_start")%> </td>
-			<td><%=rs.getString("bbs_arrival")%> </td>
-			<td><a href="AcceptDeleteAction.jsp?bbs_num=<%=rs.getInt("bbs_num")%>"  class="btn btn-primary pull-center" style="text-align: center">거절</a></td>
-			<td><a href="CarryAccept.jsp?bbs_num=<%=rs.getInt("bbs_num")%>"  class="btn btn-primary pull-center" style="text-align: center">수락</a></td>
+			<td><%=rs.getInt("b_num")%> </td>
+			<td><%=rs.getString("b_name")%> </td>
+			<td><a href="Bt_DeleteAction.jsp?b_num=<%=rs.getInt("b_num")%>"  class="btn btn-primary pull-center" style="text-align: center">거절</a></td>
+			<td><a href="CarryAccept_bt.jsp?b_num=<%=rs.getInt("b_num")%>"  class="btn btn-primary pull-center" style="text-align: center">수락</a></td>
 			</tr>
 			<%
 			}

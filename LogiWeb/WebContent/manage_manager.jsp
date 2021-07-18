@@ -64,6 +64,7 @@
 	 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 	 	<ul class="nav navbar-nav">
 	 	<li><a href="main.jsp">메인</a></li>
+	 	<li><a href="manage_bluetooth.jsp">기기매칭</a></li>
 	 	<li><a href="manage_Accept.jsp">운반수락</a></li>
 	 	<li><a href="manage_bbs.jsp">운반현황</a></li>
 	 	<li class="active"><a href="manage_manager.jsp">관리자현황</a></li>
